@@ -1,0 +1,34 @@
+# docker-compose.yml
+version: '3.1'
+
+services:
+
+  user-service:
+    build: ./user-service
+    ports:
+    - 50051:50051
+    environment:
+      MICRO_ADDRESS: ":50051"
+      MICRO_REGISTRY: "mdns"
+      DB_HOST: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"
+      DISABLE_AUTH: "true"
+
+  payment-service:
+    build: ./payment-service
+    ports:
+    - 50052:50051
+    environment:
+      MICRO_ADDRESS: ":50051"
+      MICRO_REGISTRY: "mdns"
+      DB_HOST: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"
+      STRIPE_KEY: "sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
+      DISABLE_AUTH: "true"
+
+  email-service:
+    build: ./email-service
+    ports:
+    - 50053:50051
+    environment:
+      MICRO_ADDRESS: ":50051"
+      MICRO_REGISTRY: "mdns"
+      DISABLE_AUTH: "true"
