@@ -1,12 +1,9 @@
 syntax = "proto3";
 
-package user;
+package go.micro.srv.email;
 
-service UserService {
-    rpc Create(Request) returns (Response) {}
-    rpc Get(User) returns (Response) {}
-    rpc GetAll(Request) returns (Response) {}
-    rpc ValidateToken(Token) returns (Token) {}
+service EmailService {
+    rpc Send(User) returns (Response) {}
 }
 
 message User {
@@ -34,25 +31,4 @@ message User {
     string referral_code = 22;
 }
 
-message Token {
-    string token = 1;
-    bool valid = 2;
-    repeated Error errors = 3;
-}
-
-message Request {
-    User user = 1;
-    string token = 2;
-    bool save_card = 3;
-}
-
-message Response {
-    User user = 1;
-    repeated User users = 2;
-    repeated Error errors = 3;
-}
-
-message Error {
-    int32 code = 1;
-    string description = 2;
-}
+message Response {}
