@@ -3,12 +3,13 @@ package main
 import (
 	paymentService "github.com/jackson6/gcic-service/payment-service/proto/payment"
 	"github.com/micro/go-micro"
+	k8s "github.com/micro/kubernetes/go/micro"
 	"log"
 	"os"
 )
 
 const (
-	defaultHost = "localhost:27017"
+	defaultHost = "mongo:27017"
 )
 
 func main() {
@@ -34,7 +35,7 @@ func main() {
 		log.Panicf("Could not connect to datastore with host %s - %v", host, err)
 	}
 
-	srv := micro.NewService(
+	srv := k8s.NewService(
 		micro.Name("gcic.payment"),
 		micro.Version("latest"),
 	)

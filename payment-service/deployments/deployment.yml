@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: payment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+      - name: payment-service
+        image: eu.gcr.io/gcic-217608/payment-service:latest
+        imagePullPolicy: Always
+        command: [
+          "./payment-service",
+          "--selector=static",
+          "--server_address=:8080",
+        ]
+        env:
+        - name: DB_HOST
+          value: "mongo:27017"
+        - name: UPDATED_AT
+          value: "Sun 19 Sep 2018 14:38:58 GMT"
+        ports:
+        - containerPort: 8080
+          name: payment-port

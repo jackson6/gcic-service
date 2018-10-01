@@ -3,7 +3,7 @@
 # We use the official golang image, which contains all the
 # correct build tools and libraries. Notice `as builder`,
 # this gives this container a name that we can reference later on.
-FROM golang:1.9.0 as builder
+FROM golang:1.10 as builder
 
 # Set our workdir to our current service in the gopath
 WORKDIR /go/src/github.com/jackson6/gcic-service/payment-service
@@ -14,15 +14,15 @@ COPY . .
 # Here we're pulling in godep, which is a dependency manager tool,
 # we're going to use dep instead of go get, to get around a few
 # quirks in how go get works with sub-packages.
-RUN go get -u github.com/golang/dep/cmd/dep
+#RUN go get -u github.com/golang/dep/cmd/dep
 
 # Create a dep project, and run `ensure`, which will pull in all
 # of the dependencies within this directory.
-RUN dep init && dep ensure
+#RUN dep init && dep ensure
 
 # Build the binary, with a few flags which will allow
 # us to run this binary in Alpine.
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo .
+RUN CGO_ENABLED=0 GOOS=linux go build -o payment-service -a -installsuffix cgo main.go repository.go handler.go datastore.go
 
 # Here we're using a second FROM statement, which is strange,
 # but this tells Docker to start a new build process with this
@@ -45,5 +45,4 @@ COPY --from=builder /go/src/github.com/jackson6/gcic-service/payment-service/pay
 # Run the binary as per usual! This time with a binary build in a
 # separate container, with all of the correct dependencies and
 # run time libraries.
-CMD ["export  DB_HOST=mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"]
 CMD ["./payment-service"]

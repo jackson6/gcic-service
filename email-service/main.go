@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	emailService "github.com/jackson6/gcic-service/email-service/proto/email"
+	k8s "github.com/micro/kubernetes/go/micro"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/broker"
@@ -22,7 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	srv := micro.NewService(
+	srv := k8s.NewService(
 		micro.Name("go.micro.srv.email"),
 		micro.Version("latest"),
 	)
