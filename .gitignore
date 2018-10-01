@@ -1,1 +1,4 @@
 .idea/
+user-service/user-service
+payment-service/payment-service
+email-service/email-service
