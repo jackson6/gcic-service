@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package partner;
+
+service PartnerService {
+    rpc Create(Partner) returns (Response) {}
+    rpc Update(Partner) returns (Response) {}
+    rpc Delete(Partner) returns (Response) {}
+    rpc Get(Partner) returns (Response) {}
+    rpc All(Request) returns (Response) {}
+}
+
+message Partner {
+    string id = 1;
+    string location = 2;
+    string contact = 3;
+    string img = 4;
+}
+
+message Request {}
+
+message Error {
+    int32 code = 1;
+    string description = 2;
+}
+
+message Response {
+    int32 code = 1;
+    Partner partner = 2;
+    repeated Partner partners = 3;
+    repeated Error errors = 4;
+}

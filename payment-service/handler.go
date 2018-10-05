@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "github.com/jackson6/gcic-service/payment-service/proto/payment"
 	"gopkg.in/mgo.v2"
+	"log"
 )
 
 // Service should implement all of the methods to satisfy the service
@@ -20,6 +21,8 @@ func (s *service) GetRepo() Repository {
 
 func (s *service) CreateCharge(ctx context.Context, req *pb.Charge, res *pb.Charge) error {
 	repo := s.GetRepo()
+
+	log.Println(req)
 
 	// Save our user
 	charge, err := repo.CreateCharge(req)

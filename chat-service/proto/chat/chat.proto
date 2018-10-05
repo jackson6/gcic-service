@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package chat;
+
+service ChatService {
+    get Send(Message) returns (Response) {}
+}
+
+message Message {
+    string id = 1;
+    string from = 2;
+    string to = 3;
+    string text = 4;
+}
+
+message Response {}

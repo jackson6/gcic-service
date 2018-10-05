@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: chat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat
+  template:
+    metadata:
+      labels:
+        app: chat
+    spec:
+      containers:
+      - name: chat-service
+        image: eu.gcr.io/gcic-217608/chat-service:latest
+        imagePullPolicy: Always
+        command: [
+          "./chat-service",
+          "--selector=static",
+          "--server_address=:8080",
+        ]
+        env:
+        - name: DB_HOST
+          value: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330"
+        - name: UPDATED_AT
+          value: "Sun 19 Sep 2018 14:38:58 GMT"
+        ports:
+        - containerPort: 8080
+          name: chat-port

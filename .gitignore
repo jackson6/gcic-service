@@ -1,4 +1,8 @@
 .idea/
 user-service/user-service
+plan-service/plan-service
 payment-service/payment-service
 email-service/email-service
+chat-service/chat-service
+benefit-service/benefit-service
+partner-service/partner-service

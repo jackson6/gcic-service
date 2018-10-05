@@ -5,7 +5,7 @@ package user;
 service UserService {
     rpc Create(Request) returns (Response) {}
     rpc Get(User) returns (Response) {}
-    rpc GetAll(Request) returns (Response) {}
+    rpc All(Request) returns (Response) {}
     rpc ValidateToken(Token) returns (Token) {}
 }
 
@@ -48,8 +48,9 @@ message Request {
 
 message Response {
     User user = 1;
-    repeated User users = 2;
-    repeated Error errors = 3;
+    Error error = 2;
+    repeated User users = 3;
+    repeated Error errors = 4;
 }
 
 message Error {

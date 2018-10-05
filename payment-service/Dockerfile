@@ -25,7 +25,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o payment-service -a -installsuffix cgo main.go repository.go handler.go datastore.go
 
 # Here we're using a second FROM statement, which is strange,
-# but this tells Docker to start a new build process with this
+# but this tells Dockerfile to start a new build process with this
 # image.
 FROM debian:latest
 
@@ -45,4 +45,7 @@ COPY --from=builder /go/src/github.com/jackson6/gcic-service/payment-service/pay
 # Run the binary as per usual! This time with a binary build in a
 # separate container, with all of the correct dependencies and
 # run time libraries.
+RUN  apt-get update && \
+     apt-get install -y ca-certificates
+
 CMD ["./payment-service"]

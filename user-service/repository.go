@@ -15,7 +15,7 @@ const (
 
 type Repository interface {
 	Create(*pb.User) (*pb.User, error)
-	GetAll() ([]*pb.User, error)
+	All() ([]*pb.User, error)
 	Get(*pb.User) (*pb.User, error)
 	GetByEmail(*bson.M) (*pb.User, error)
 	Close()
@@ -27,6 +27,8 @@ type UserRepository struct {
 
 // Create a new user
 func (repo *UserRepository) Create(user *pb.User)  (*pb.User, error) {
+	id := bson.NewObjectId()
+	user.Id = &id
 	err := repo.collection().Insert(user)
 	if err != nil {
 		return nil, err
@@ -35,10 +37,10 @@ func (repo *UserRepository) Create(user *pb.User)  (*pb.User, error) {
 }
 
 // GetAll users
-func (repo *UserRepository) GetAll() ([]*pb.User, error) {
+func (repo *UserRepository) All() ([]*pb.User, error) {
 	var users []*pb.User
 	// Find normally takes a query, but as we want everything, we can nil this.
-	// We then bind our consignments variable by passing it as an argument to .All().
+	// We then bind our consignments variable by passing it as an argument to .All().
 	// That sets consignments to the result of the find query.
 	// There's also a `One()` function for single results.
 	err := repo.collection().Find(nil).All(&users)
@@ -46,7 +48,7 @@ func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 }
 
 func (repo *UserRepository) Get(user *pb.User) (*pb.User, error) {
-	err := repo.collection().FindId(bson.ObjectId(user.UserId)).One(&user)
+	err := repo.collection().FindId(user.Id).One(&user)
 	if err != nil {
 		return nil, err
 	}

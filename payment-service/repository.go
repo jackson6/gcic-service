@@ -12,7 +12,7 @@ import (
 
 const (
 	dbName = "invest"
-	userCollection = "transaction"
+	paymentCollection = "transaction"
 )
 
 type Repository interface {
@@ -98,5 +98,5 @@ func (repo *PaymentRepository) Close() {
 }
 
 func (repo *PaymentRepository) collection() *mgo.Collection {
-	return repo.session.DB(dbName).C(userCollection)
+	return repo.session.DB(dbName).C(paymentCollection)
 }

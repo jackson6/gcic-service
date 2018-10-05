@@ -9,5 +9,6 @@ run:
 		-e MICRO_SERVER_ADDRESS=:50052 \
 		-e DISABLE_AUTH=false \
 		-e MICRO_REGISTRY=mdns \
+		-e STRIPE_KEY="sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
 		-e DB_HOST=mongodb\://gcic\:dreamer6@ds163330.mlab.com\:63330/invest \
 		payment-service

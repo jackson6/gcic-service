@@ -25,7 +25,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo .
 
 # Here we're using a second FROM statement, which is strange,
-# but this tells Docker to start a new build process with this
+# but this tells Dockerfile to start a new build process with this
 # image.
 FROM debian:latest
 

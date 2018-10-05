@@ -5,16 +5,15 @@ import (
 	"context"
 	"errors"
 	"github.com/micro/go-micro"
-	k8s "github.com/micro/kubernetes/go/micro"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/server"
 	"log"
 	"os"
 
+	paymentService "github.com/jackson6/gcic-service/payment-service/proto/payment"
 	// Import the generated protobuf code
 	userService "github.com/jackson6/gcic-service/user-service/proto/user"
-	paymentService "github.com/jackson6/gcic-service/payment-service/proto/payment"
 )
 
 const (
@@ -53,7 +52,7 @@ func main() {
 	}
 
 	// Create a new service. Optionally include some options here.
-	srv := k8s.NewService(
+	srv := micro.NewService(
 
 		// This name must match the package name given in your protobuf definition
 		micro.Name("gcic.user"),

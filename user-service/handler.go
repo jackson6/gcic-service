@@ -41,6 +41,8 @@ func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response)
 		Amount: 30000,
 		Description: "Plan Description",
 		Currency: "jmd",
+		Token: req.Token,
+		UserId: req.User.UserId,
 	}
 
 	if req.SaveCard {
@@ -84,11 +86,11 @@ func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error
 	return nil
 }
 
-func (s *service) GetAll(ctx context.Context,req *pb.Request, res *pb.Response) error {
+func (s *service) All(ctx context.Context,req *pb.Request, res *pb.Response) error {
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	users, err := repo.GetAll()
+	users, err := repo.All()
 	if err !=nil {
 		return err
 	}
@@ -124,7 +126,7 @@ func (s *service) publishEvent(user *pb.User) error {
 	// Create a broker message
 	msg := &broker.Message{
 		Header: map[string]string{
-			"id": user.Id,
+			"id": user.Id.Hex(),
 		},
 		Body: body,
 	}
