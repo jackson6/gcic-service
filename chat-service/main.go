@@ -2,8 +2,9 @@
 package main
 
 import (
-	"github.com/micro/go-micro"
-	 "github.com/micro/go-plugins/client/http"
+	userService "github.com/jackson6/gcic-service/user-service/proto/user"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-web"
 	"log"
 	"os"
 )
@@ -34,27 +35,26 @@ func main() {
 		log.Panicf("Could not connect to datastore with host %s - %v", host, err)
 	}
 
-	srv := micro.NewService(
-		micro.Name("go.micro.srv.chat"),
-		micro.Version("latest"),
-		micro.Client(http.NewClient()),
+	srv := web.NewService(
+		web.Name("gcic.chat"),
+		web.Version("latest"),
 	)
 
 	srv.Init()
 
+	hub := newHub()
+
+	userClient := userService.NewUserServiceClient("gcic.user", client.DefaultClient)
+	service := service{session, hub, userClient}
+
+	go hub.run()
+
+	// Register Handler
+	srv.HandleFunc("/chat", hub.handleWebSocket)
+	srv.HandleFunc("/online", service.Online)
 
 	// Run the server
 	if err := srv.Run(); err != nil {
 		log.Println(err)
-	}
-
-	hub := newHub()
-
-	go hub.run()
-
-	http.HandleFunc("/pusher", hub.handleWebSocket)
-	err = http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal(err)
 	}
 }

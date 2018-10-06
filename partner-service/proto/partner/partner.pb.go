@@ -6,7 +6,6 @@ package partner
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	"gopkg.in/mgo.v2/bson"
 	math "math"
 )
 
@@ -28,7 +27,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Partner struct {
-	Id                   *bson.ObjectId   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" bson:"_id"`
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Location             string   `protobuf:"bytes,2,opt,name=location,proto3" json:"location,omitempty"`
 	Contact              string   `protobuf:"bytes,3,opt,name=contact,proto3" json:"contact,omitempty"`
 	Img                  string   `protobuf:"bytes,4,opt,name=img,proto3" json:"img,omitempty"`
@@ -62,7 +61,7 @@ func (m *Partner) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Partner proto.InternalMessageInfo
 
-func (m *Partner) GetId() *bson.ObjectId {
+func (m *Partner) GetId() string {
 	if m != nil {
 		return m.Id
 	}

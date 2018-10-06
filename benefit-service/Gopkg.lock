@@ -70,6 +70,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:bd348f6c333ecf9e28621193978359cc33a83a60970a132a08fa26f175cdeec2"
+  name = "github.com/jackson6/gcic-service"
+  packages = ["plan-service/proto/plan"]
+  pruneopts = "UT"
+  revision = "73530999d4d3496a5c78341ee29b7723e8ec4284"
+
+[[projects]]
+  branch = "master"
   digest = "1:0d3455926b7b805da0ba04fe325ad7662f47c0b6522500a2d787667e2fb6e463"
   name = "github.com/micro/cli"
   packages = ["."]
@@ -244,6 +252,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/golang/protobuf/proto",
+    "github.com/jackson6/gcic-service/plan-service/proto/plan",
     "github.com/micro/go-micro",
     "github.com/micro/go-micro/client",
     "github.com/micro/go-micro/server",

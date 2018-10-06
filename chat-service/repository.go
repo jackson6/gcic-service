@@ -11,12 +11,14 @@ const (
 )
 
 type Repository interface {
-	Save(message *pb.Message) (*pb.Message, error)
+	Save(*pb.Message) (*pb.Message, error)
+	Online() []string
 	Close()
 }
 
 type ChatRepository struct {
 	session *mgo.Session
+	hub *Hub
 }
 
 // Create a new user
@@ -26,6 +28,17 @@ func (repo *ChatRepository) Save(message *pb.Message)  (*pb.Message, error) {
 		return nil, err
 	}
 	return message, nil
+}
+
+// Get all online new user
+func (repo *ChatRepository) Online() []string {
+	clients := repo.clients()
+	var online []string
+
+	for id, _ := range clients {
+		online = append(online, id)
+	}
+	return online
 }
 
 // Close closes the database session after each query has ran.
@@ -43,4 +56,8 @@ func (repo *ChatRepository) Close() {
 
 func (repo *ChatRepository) collection() *mgo.Collection {
 	return repo.session.DB(dbName).C(chatCollection)
+}
+
+func (repo *ChatRepository) clients() map[string]*Client {
+	return repo.hub.clients
 }

@@ -7,6 +7,12 @@ service UserService {
     rpc Get(User) returns (Response) {}
     rpc All(Request) returns (Response) {}
     rpc ValidateToken(Token) returns (Token) {}
+    rpc GetUsers(Id) returns (Response) {}
+    rpc GetByEmail(User) returns (Response) {}
+}
+
+message Id {
+    repeated string id = 1;
 }
 
 message User {
@@ -23,15 +29,16 @@ message User {
     string cell_phone = 11;
     string sponsor_id = 12;
     string address = 13;
-    string parish = 14;
-    string country = 15;
-    string question = 16;
-    string answer = 17;
-    string dob = 18;
-    string gender = 19;
-    string stripe_id = 20;
-    string plan_id = 21;
-    string referral_code = 22;
+    string address2 = 14;
+    string parish = 15;
+    string country = 16;
+    string question = 17;
+    string answer = 18;
+    string dob = 19;
+    string gender = 20;
+    string stripe_id = 21;
+    string plan_id = 22;
+    string referral_code = 23;
 }
 
 message Token {

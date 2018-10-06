@@ -5,7 +5,6 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -28,8 +27,6 @@ type PlanRepository struct {
 
 // Create a new user
 func (repo *PlanRepository) Create(plan *pb.Plan)  (*pb.Plan, error) {
-	id := bson.NewObjectId()
-	plan.Id = &id
 	err := repo.collection().Insert(plan)
 	if err != nil {
 		return nil, err

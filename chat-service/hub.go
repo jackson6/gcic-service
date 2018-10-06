@@ -3,9 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"gopkg.in/mgo.v2"
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 
 	"github.com/gorilla/websocket"
@@ -22,7 +22,6 @@ type Hub struct {
 	register   chan *Client
 	unregister chan *Client
 	mutex      *sync.Mutex
-	session	   *mgo.Session
 }
 
 func newHub() *Hub {
@@ -33,24 +32,6 @@ func newHub() *Hub {
 		unregister: make(chan *Client),
 		mutex:      &sync.Mutex{},
 	}
-}
-
-func (s *Hub) GetRepo() Repository {
-	return &ChatRepository{s.session.Clone()}
-}
-
-// SaveMessage - we created just one method on our service
-func (s *Hub) save(msg *pb.Message) error {
-	repo := s.GetRepo()
-	defer repo.Close()
-
-	// Save our partner
-	_, err := repo.Save(msg)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (hub *Hub) run() {
@@ -82,12 +63,12 @@ func (hub *Hub) send(message interface{}, client *Client) {
 
 func (hub *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	socket, err := upgrader.Upgrade(w, r, nil)
-	id := r.URL.Query().Get("id")
 	if err != nil {
-		log.Println(err)
-		http.Error(w, "could not upgrade", http.StatusInternalServerError)
+		log.Println("upgrade: ", err)
 		return
 	}
+
+	id := r.URL.Query().Get("id")
 	client := newClient(hub, socket, id)
 	hub.register <- client
 
@@ -101,6 +82,7 @@ func (hub *Hub) onConnect(client *Client) {
 	hub.mutex.Lock()
 	defer hub.mutex.Unlock()
 	hub.clients[client.id] = client
+	hub.broadcastMessage("connected:"+strconv.Itoa(len(hub.clients)), nil)
 }
 
 func (hub *Hub) onMessage(message []byte) {
@@ -116,7 +98,6 @@ func (hub *Hub) onMessage(message []byte) {
 
 	to := hub.clients[msg.To]
 	hub.send(msg, to)
-	go hub.save(&msg)
 }
 
 func (hub *Hub) onDisconnect(client *Client) {

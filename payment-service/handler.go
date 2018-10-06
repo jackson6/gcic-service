@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	pb "github.com/jackson6/gcic-service/payment-service/proto/payment"
-	"gopkg.in/mgo.v2"
 	"log"
 )
 
@@ -12,20 +11,14 @@ import (
 // in the generated code itself for the exact method signatures etc
 // to give you a better idea.
 type service struct {
-	session *mgo.Session
-}
-
-func (s *service) GetRepo() Repository {
-	return &PaymentRepository{s.session}
+	repo Repository
 }
 
 func (s *service) CreateCharge(ctx context.Context, req *pb.Charge, res *pb.Charge) error {
-	repo := s.GetRepo()
-
 	log.Println(req)
 
 	// Save our user
-	charge, err := repo.CreateCharge(req)
+	charge, err := s.repo.CreateCharge(req)
 	if err != nil {
 		return err
 	}
@@ -38,10 +31,8 @@ func (s *service) CreateCharge(ctx context.Context, req *pb.Charge, res *pb.Char
 }
 
 func (s *service) CreateCustomer(ctx context.Context, req *pb.Customer, res *pb.Customer) error {
-	repo := s.GetRepo()
-
 	// Save our user
-	customer, err := repo.CreateCustomer(req)
+	customer, err := s.repo.CreateCustomer(req)
 	if err != nil {
 		return err
 	}

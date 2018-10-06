@@ -78,6 +78,14 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:19243c504733811cc44e5236688b857a54ad2660272cdb05dd67fa4fba6cbde5"
+  name = "github.com/jackson6/gcic-service"
+  packages = ["user-service/proto/user"]
+  pruneopts = "UT"
+  revision = "73530999d4d3496a5c78341ee29b7723e8ec4284"
+
+[[projects]]
+  branch = "master"
   digest = "1:0d3455926b7b805da0ba04fe325ad7662f47c0b6522500a2d787667e2fb6e463"
   name = "github.com/micro/cli"
   packages = ["."]
@@ -93,10 +101,9 @@
   revision = "cbfa9447f9b655f8e66583237e51f40ca9bff860"
 
 [[projects]]
-  digest = "1:74c3e8cc1ea998ce4d718f156c504084102dad44d6cc23309395c604d3243518"
+  digest = "1:21dda5bd01d5b23579bc37b1cec9f070f6047829fff90b3dd922e4b4a3c145fb"
   name = "github.com/micro/go-micro"
   packages = [
-    ".",
     "broker",
     "broker/codec",
     "broker/codec/json",
@@ -125,20 +132,20 @@
   version = "v0.11.0"
 
 [[projects]]
-  digest = "1:05aefd879fdb1197c0e42e5eb9320fc70d8520965d5fa6b597429f272b763b12"
-  name = "github.com/micro/go-plugins"
-  packages = ["client/http"]
-  pruneopts = "UT"
-  revision = "c816653a69ab521af8326f5e6e2596915f5772f6"
-  version = "v0.14.0"
-
-[[projects]]
   branch = "master"
   digest = "1:7243b71c52f5226ed26340e9bbffd702484c152caa2e78234f4384a8309dcafb"
   name = "github.com/micro/go-rcache"
   packages = ["."]
   pruneopts = "UT"
   revision = "a581a57b513351792b9f21fc8b95d87b1c5a95da"
+
+[[projects]]
+  digest = "1:28b581dd6d772a1e8c1576e0f0e8ac1e87fd16eae35b197c22a9ee5f39a0d619"
+  name = "github.com/micro/go-web"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "8373ea64a8063743652142796015afdf090d98db"
+  version = "v0.4.0"
 
 [[projects]]
   branch = "master"
@@ -150,10 +157,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:366b59150c83c1b7c33818cb7b79123920d543d78bd23d80121a621776255139"
+  digest = "1:186721155e7aef08313eec7b1e9d74ccbe9f21a314a3167dbdb7cccd8978dce6"
   name = "github.com/micro/util"
   packages = [
     "go/lib/addr",
+    "go/lib/http",
     "go/lib/net",
     "go/lib/tls",
   ]
@@ -231,7 +239,7 @@
     "ipv6",
   ]
   pruneopts = "UT"
-  revision = "4dfa2610cdf3b287375bbba5b8f2a14d3b01d8de"
+  revision = "146acd28ed5894421fb5aac80ca93bc1b1f46f87"
 
 [[projects]]
   branch = "master"
@@ -261,8 +269,9 @@
   input-imports = [
     "github.com/golang/protobuf/proto",
     "github.com/gorilla/websocket",
-    "github.com/micro/go-micro",
-    "github.com/micro/go-plugins/client/http",
+    "github.com/jackson6/gcic-service/user-service/proto/user",
+    "github.com/micro/go-micro/client",
+    "github.com/micro/go-web",
     "gopkg.in/mgo.v2",
   ]
   solver-name = "gps-cdcl"

@@ -5,7 +5,6 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/partner-service/proto/partner"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -28,8 +27,6 @@ type PartnerRepository struct {
 
 // Create a new user
 func (repo *PartnerRepository) Create(partner *pb.Partner)  (*pb.Partner, error) {
-	id := bson.NewObjectId()
-	partner.Id = &id
 	err := repo.collection().Insert(partner)
 	if err != nil {
 		return nil, err

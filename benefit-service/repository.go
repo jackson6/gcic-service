@@ -5,7 +5,6 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/benefit-service/proto/benefit"
 	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -28,8 +27,6 @@ type BenefitRepository struct {
 
 // Create a new user
 func (repo *BenefitRepository) Create(benefit *pb.Benefit)  (*pb.Benefit, error) {
-	id := bson.NewObjectId()
-	benefit.Id = &id
 	err := repo.collection().Insert(benefit)
 	if err != nil {
 		return nil, err

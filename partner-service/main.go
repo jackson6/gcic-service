@@ -37,14 +37,6 @@ func main() {
 		log.Panicf("Could not connect to datastore with host %s - %v", host, err)
 	}
 
-	firebase, err := CreateFrirebase()
-	if err != nil {
-
-		// We're wrapping the error returned from our CreateFirebase
-		// here to add some context to the error.
-		log.Panic("Could not connect to firebase", err)
-	}
-
 	// Create a new service. Optionally include some options here.
 	srv := micro.NewService(
 

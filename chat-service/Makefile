@@ -4,7 +4,7 @@ build:
 	GOOS=linux GOARCH=amd64 go build
 	sudo docker build -t chat-service .
 run:
-	sudo docker run --net="host" \
+	sudo docker run --net="host" --handler=http\
 		-p 50051 \
 		-e MICRO_SERVER_ADDRESS=:50054 \
 		-e DISABLE_AUTH=false \

@@ -11,8 +11,12 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"
       STRIPE_KEY: "sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
+      DB_NAME: "postgres"
+      DB_HOST: "datastore:27017"
+      DB_PORT: "5432"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
       DISABLE_AUTH: "true"
 
   user-service:
@@ -23,7 +27,11 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"
+      DB_NAME: "postgres"
+      DB_HOST: "datastore:27017"
+      DB_PORT: "5432"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
       DISABLE_AUTH: "true"
 
   plan-service:
@@ -34,7 +42,7 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"
+      DB_HOST: "datastore:27017"
       DISABLE_AUTH: "true"
 
   partner-service:
@@ -45,7 +53,7 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"
+      DB_HOST: "datastore:27017"
       DISABLE_AUTH: "true"
 
   benefit-service:
@@ -56,7 +64,7 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"
+      DB_HOST: "datastore:27017"
       DISABLE_AUTH: "true"
 
   chat-service:
@@ -67,5 +75,15 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330/invest"
+      DB_HOST: "datastore:27017"
       DISABLE_AUTH: "true"
+
+  database:
+    image: postgres
+    ports:
+    - 5432:5432
+
+  datastore:
+    image: mongo
+    ports:
+    - 27017:27017

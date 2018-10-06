@@ -16,32 +16,29 @@ import (
 	userService "github.com/jackson6/gcic-service/user-service/proto/user"
 )
 
-const (
-	defaultHost = "localhost:27017"
-)
-
 func main() {
 
-	// Database host from the environment variables
-	host := os.Getenv("DB_HOST")
-
-	if host == "" {
-		host = defaultHost
-	}
-
-	session, err := CreateSession(host)
+	db, err := CreateSession()
 
 
 	// Mgo creates a 'master' session, we need to end that session
 	// before the main function closes.
-	defer session.Close()
+	defer db.Close()
 
 	if err != nil {
 
 		// We're wrapping the error returned from our CreateSession
 		// here to add some context to the error.
-		log.Panicf("Could not connect to datastore with host %s - %v", host, err)
+		log.Panicf("Could not connect to datastore - %v", err)
 	}
+
+	repo := &UserRepository{db}
+
+	// Automatically migrates the user struct
+	// into database columns/types etc. This will
+	// check for changes and migrate them each time
+	// this service is restarted.
+	db.AutoMigrate(&userService.User{})
 
 	firebase, err := CreateFrirebase()
 	if err != nil {
@@ -69,7 +66,7 @@ func main() {
 	// Register our service with the gRPC server, this will tie our
 	// implementation into the auto-generated interface code for our
 	// protobuf definition.
-	userService.RegisterUserServiceHandler(srv.Server(), &service{session, firebase, pubsub, paymentClient})
+	userService.RegisterUserServiceHandler(srv.Server(), &service{repo, firebase, pubsub, paymentClient})
 
 	// Run the server
 	if err := srv.Run(); err != nil {

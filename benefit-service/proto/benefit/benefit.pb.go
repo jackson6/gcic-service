@@ -6,7 +6,6 @@ package benefit
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	"gopkg.in/mgo.v2/bson"
 	math "math"
 )
 
@@ -28,7 +27,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type Benefit struct {
-	Id                   bson.ObjectId `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" bson:"_id"`
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title                string   `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	Name                 string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	Description          string   `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
@@ -65,7 +64,7 @@ func (m *Benefit) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Benefit proto.InternalMessageInfo
 
-func (m *Benefit) GetId() bson.ObjectId {
+func (m *Benefit) GetId() string {
 	if m != nil {
 		return m.Id
 	}

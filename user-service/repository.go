@@ -4,79 +4,81 @@ package main
 
 import (
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
-	"gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
-)
-
-const (
-	dbName = "invest"
-	userCollection = "users"
+	"github.com/jinzhu/gorm"
 )
 
 type Repository interface {
-	Create(*pb.User) (*pb.User, error)
+	Create(*pb.User) error
 	All() ([]*pb.User, error)
-	Get(*pb.User) (*pb.User, error)
-	GetByEmail(*bson.M) (*pb.User, error)
-	Close()
+	Get(string) (*pb.User, error)
+	GetByEmail(string) (*pb.User, error)
+	GetUsers([]string) ([]*pb.User, error)
 }
 
 type UserRepository struct {
-	session *mgo.Session
+	db *gorm.DB
 }
 
 // Create a new user
-func (repo *UserRepository) Create(user *pb.User)  (*pb.User, error) {
-	id := bson.NewObjectId()
-	user.Id = &id
-	err := repo.collection().Insert(user)
-	if err != nil {
-		return nil, err
+func (repo *UserRepository) Create(user *pb.User) error {
+	if err := repo.db.Create(user).Error; err != nil {
+		return err
 	}
-	return user, nil
+	return nil
 }
 
 // GetAll users
 func (repo *UserRepository) All() ([]*pb.User, error) {
 	var users []*pb.User
-	// Find normally takes a query, but as we want everything, we can nil this.
-	// We then bind our consignments variable by passing it as an argument to .All().
-	// That sets consignments to the result of the find query.
-	// There's also a `One()` function for single results.
-	err := repo.collection().Find(nil).All(&users)
-	return users, err
-}
-
-func (repo *UserRepository) Get(user *pb.User) (*pb.User, error) {
-	err := repo.collection().FindId(user.Id).One(&user)
-	if err != nil {
+	if err := repo.db.Find(&users).Error; err != nil {
 		return nil, err
 	}
-	return user, nil
+	return users, nil
 }
 
-func (repo *UserRepository) GetByEmail(find *bson.M) (*pb.User, error) {
+func (repo *UserRepository) Get(id string) (*pb.User, error) {
 	var user *pb.User
-	err := repo.collection().Find(find).One(&user)
-	if err != nil {
+	user.Id = id
+	if err := repo.db.First(&user).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-// Close closes the database session after each query has ran.
-// Mgo creates a 'master' session on start-up, it's then good practice
-// to copy a new session for each request that's made. This means that
-// each request has its own database session. This is safer and more efficient,
-// as under the hood each session has its own database socket and error handling.
-// Using one main database socket means requests having to wait for that session.
-// I.e this approach avoids locking and allows for requests to be processed concurrently. Nice!
-// But... it does mean we need to ensure each session is closed on completion. Otherwise
-// you'll likely build up loads of dud connections and hit a connection limit. Not nice!
-func (repo *UserRepository) Close() {
-	repo.session.Close()
+func (repo *UserRepository) GetUsers(id []string) ([]*pb.User, error) {
+	users := []*pb.User{}
+	if err := repo.db.Where("id IN (?)", id).
+		Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
-func (repo *UserRepository) collection() *mgo.Collection {
-	return repo.session.DB(dbName).C(userCollection)
+//func (repo *UserRepository) GetUsers(id []string) ([]*pb.User, error) {
+//	var users []*pb.User
+//	rows, err := repo.db.Raw(`select id, first_name, last_name, dob, email, trn, parish, country, address, cell_phone,
+//									home_phone, address2, member_id, gender, initial, plan_id, sponsor_id, referral_code
+//									from users where IN (?)`, id).Rows()
+//	if err != nil {
+//		return nil, err
+//	}
+//	defer rows.Close()
+//	for rows.Next() {
+//		user := new(pb.User)
+//		rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Dob, &user.Email, &user.Trn, &user.Parish,
+//					&user.Country, &user.Address, &user.CellPhone, &user.HomePhone, &user.Address2, &user.MemberId,
+//					&user.Gender, &user.Initial, &user.PlanId, &user.SponsorId, &user.ReferralCode)
+//		users = append(users, user)
+//	}
+//
+//	return users, nil
+//}
+
+func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
+	user := &pb.User{}
+	if err := repo.db.Where("email = ?", email).
+		First(&user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }

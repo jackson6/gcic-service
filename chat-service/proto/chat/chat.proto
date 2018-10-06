@@ -2,10 +2,6 @@ syntax = "proto3";
 
 package chat;
 
-service ChatService {
-    get Send(Message) returns (Response) {}
-}
-
 message Message {
     string id = 1;
     string from = 2;

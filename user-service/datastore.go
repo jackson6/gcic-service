@@ -3,22 +3,30 @@
 package main
 
 import (
+	"fmt"
 	"golang.org/x/net/context"
-	"gopkg.in/mgo.v2"
 	"firebase.google.com/go"
 	"google.golang.org/api/option"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"os"
 )
 
 // CreateSession creates the main session to our mongodb instance
-func CreateSession(host string) (*mgo.Session, error) {
-	session, err := mgo.Dial(host)
-	if err != nil {
-		return nil, err
-	}
+func CreateSession() (*gorm.DB, error) {
+	// Get database details from environment variables
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	DBName := os.Getenv("DB_NAME")
+	password := os.Getenv("DB_PASSWORD")
 
-	session.SetMode(mgo.Monotonic, true)
-
-	return session, nil
+	return gorm.Open(
+		"postgres",
+		fmt.Sprintf(
+			"host=%s user=%s dbname=%s sslmode=disable password=%s",
+			host, user, DBName, password,
+		),
+	)
 }
 
 func CreateFrirebase()(*firebase.App, error){

@@ -2,32 +2,29 @@ package main
 
 import (
 	pb "github.com/jackson6/gcic-service/payment-service/proto/payment"
+	"github.com/jinzhu/gorm"
+	"github.com/nu7hatch/gouuid"
 	"github.com/stripe/stripe-go"
 	stripeCharge "github.com/stripe/stripe-go/charge"
 	stripeCustomer "github.com/stripe/stripe-go/customer"
-	"github.com/nu7hatch/gouuid"
-	"gopkg.in/mgo.v2"
 	"os"
-)
-
-const (
-	dbName = "invest"
-	paymentCollection = "transaction"
 )
 
 type Repository interface {
 	CreateCharge(charge *pb.Charge) (*stripe.Charge, error)
 	CreateCustomer(charge *pb.Customer) (*stripe.Customer, error)
-	Close()
 }
 
 type PaymentRepository struct {
-	session *mgo.Session
+	db *gorm.DB
 }
 
 // Create a new user
 func (repo *PaymentRepository) CreateTransaction(transaction *pb.Transaction) error {
-	return repo.collection().Insert(transaction)
+	if err := repo.db.Create(transaction).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (repo *PaymentRepository) CreateCharge(charge *pb.Charge) (*stripe.Charge, error) {
@@ -82,21 +79,4 @@ func (repo *PaymentRepository) CreateCustomer(customer *pb.Customer) (*stripe.Cu
 		return nil, err
 	}
 	return newCustomer, nil
-}
-
-// Close closes the database session after each query has ran.
-// Mgo creates a 'master' session on start-up, it's then good practice
-// to copy a new session for each request that's made. This means that
-// each request has its own database session. This is safer and more efficient,
-// as under the hood each session has its own database socket and error handling.
-// Using one main database socket means requests having to wait for that session.
-// I.e this approach avoids locking and allows for requests to be processed concurrently. Nice!
-// But... it does mean we need to ensure each session is closed on completion. Otherwise
-// you'll likely build up loads of dud connections and hit a connection limit. Not nice!
-func (repo *PaymentRepository) Close() {
-	repo.session.Close()
-}
-
-func (repo *PaymentRepository) collection() *mgo.Collection {
-	return repo.session.DB(dbName).C(paymentCollection)
 }

@@ -132,12 +132,35 @@
   revision = "e3c89c926b4a1d57cbb9551f3aca7173bd066c25"
 
 [[projects]]
-  digest = "1:3e551bbb3a7c0ab2a2bf4660e7fcad16db089fdcfbb44b0199e62838038623ea"
-  name = "github.com/json-iterator/go"
+  digest = "1:6895fbe5a10c5aebd1965cac6f6905dcdb21bee01e08912d3ba6a805c2485f6a"
+  name = "github.com/jinzhu/gorm"
+  packages = [
+    ".",
+    "dialects/postgres",
+  ]
+  pruneopts = "UT"
+  revision = "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"
+  version = "v1.9.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:fd97437fbb6b7dce04132cf06775bd258cce305c44add58eb55ca86c6c325160"
+  name = "github.com/jinzhu/inflection"
   packages = ["."]
   pruneopts = "UT"
-  revision = "1624edc4454b8682399def8740d46db5e4362ba4"
-  version = "v1.1.5"
+  revision = "04140366298a54a039076d798123ffa108fff46c"
+
+[[projects]]
+  digest = "1:b18ffc558326ebaed3b4a175617f1e12ed4e3f53d6ebfe5ba372a3de16d22278"
+  name = "github.com/lib/pq"
+  packages = [
+    ".",
+    "hstore",
+    "oid",
+  ]
+  pruneopts = "UT"
+  revision = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79"
+  version = "v1.0.0"
 
 [[projects]]
   branch = "master"
@@ -146,14 +169,6 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "8b9d33ec2f19cfe2fe9f448f18b033c004c18fd2"
-
-[[projects]]
-  digest = "1:7984d4f0cdaf14595e27a91315ee2b8ac12f1ac53e3e2ee53ca90e1ddb4da7f1"
-  name = "github.com/micro/go-grpc"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "52024085c07e420ed8795c95006255a75feb500e"
-  version = "v0.3.0"
 
 [[projects]]
   branch = "master"
@@ -196,71 +211,12 @@
   version = "v0.11.0"
 
 [[projects]]
-  digest = "1:7e5efe55574f47a30fd47de2b8d6e19fe38727a2a775d953fe6afffeea05d8bc"
-  name = "github.com/micro/go-plugins"
-  packages = [
-    "client/grpc",
-    "registry/kubernetes",
-    "registry/kubernetes/client",
-    "registry/kubernetes/client/api",
-    "registry/kubernetes/client/watch",
-    "selector/cache",
-    "selector/static",
-    "server/grpc",
-  ]
-  pruneopts = "UT"
-  revision = "c816653a69ab521af8326f5e6e2596915f5772f6"
-  version = "v0.14.0"
-
-[[projects]]
   branch = "master"
   digest = "1:7243b71c52f5226ed26340e9bbffd702484c152caa2e78234f4384a8309dcafb"
   name = "github.com/micro/go-rcache"
   packages = ["."]
   pruneopts = "UT"
   revision = "a581a57b513351792b9f21fc8b95d87b1c5a95da"
-
-[[projects]]
-  branch = "master"
-  digest = "1:1031bd6e4f49a411c865e30590cd093b1e0493405eebf2d1d4388ee2a847ea15"
-  name = "github.com/micro/grpc-go"
-  packages = [
-    ".",
-    "balancer",
-    "balancer/base",
-    "balancer/roundrobin",
-    "codes",
-    "connectivity",
-    "credentials",
-    "encoding",
-    "encoding/proto",
-    "internal",
-    "internal/backoff",
-    "internal/channelz",
-    "internal/envconfig",
-    "internal/grpcrand",
-    "keepalive",
-    "logger",
-    "metadata",
-    "naming",
-    "peer",
-    "resolver",
-    "resolver/dns",
-    "resolver/passthrough",
-    "stats",
-    "status",
-    "transport",
-  ]
-  pruneopts = "UT"
-  revision = "2c703400301b46ab89350e7539834de03073527e"
-
-[[projects]]
-  digest = "1:f4e23216c844a5d78d54a792e82aa46a1904357b0f3aa5c44cc2c667316087b3"
-  name = "github.com/micro/kubernetes"
-  packages = ["go/micro"]
-  pruneopts = "UT"
-  revision = "1b3cb85ccc7a367049117e263edc1a26a98b20b5"
-  version = "v0.1.0"
 
 [[projects]]
   branch = "master"
@@ -272,11 +228,10 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:65c7e1d0a7eb2d2062a69041059a31e65c0009f3c6cd3883d66532110025c7a3"
+  digest = "1:366b59150c83c1b7c33818cb7b79123920d543d78bd23d80121a621776255139"
   name = "github.com/micro/util"
   packages = [
     "go/lib/addr",
-    "go/lib/grpc",
     "go/lib/net",
     "go/lib/tls",
   ]
@@ -313,22 +268,6 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
-
-[[projects]]
-  digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
-  name = "github.com/modern-go/concurrent"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94"
-  version = "1.0.3"
-
-[[projects]]
-  digest = "1:e32bdbdb7c377a07a9a46378290059822efdce5c8d96fe71940d87cb4f918855"
-  name = "github.com/modern-go/reflect2"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
-  version = "1.0.1"
 
 [[projects]]
   digest = "1:e5d0bd87abc2781d14e274807a470acd180f0499f8bf5bb18606e9ec22ad9de9"
@@ -541,20 +480,6 @@
   revision = "8dea3dc473e90c8179e519d91302d0597c0ca1d1"
   version = "v1.15.0"
 
-[[projects]]
-  branch = "v2"
-  digest = "1:988de7520a09024d5d94cd99bd545afbf194893994ec759b1cda0a0bbb6adb80"
-  name = "gopkg.in/mgo.v2"
-  packages = [
-    ".",
-    "bson",
-    "internal/json",
-    "internal/sasl",
-    "internal/scram",
-  ]
-  pruneopts = "UT"
-  revision = "9856a29383ce1c59f308dd1cf0363a79b5bef6b5"
-
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -562,16 +487,15 @@
     "firebase.google.com/go",
     "github.com/golang/protobuf/proto",
     "github.com/jackson6/gcic-service/payment-service/proto/payment",
+    "github.com/jinzhu/gorm",
+    "github.com/jinzhu/gorm/dialects/postgres",
     "github.com/micro/go-micro",
     "github.com/micro/go-micro/broker",
     "github.com/micro/go-micro/client",
     "github.com/micro/go-micro/metadata",
     "github.com/micro/go-micro/server",
-    "github.com/micro/kubernetes/go/micro",
     "golang.org/x/net/context",
     "google.golang.org/api/option",
-    "gopkg.in/mgo.v2",
-    "gopkg.in/mgo.v2/bson",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

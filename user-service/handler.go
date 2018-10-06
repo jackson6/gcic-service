@@ -5,11 +5,10 @@ package main
 import (
 	"encoding/json"
 	"firebase.google.com/go"
-	pb "github.com/jackson6/gcic-service/user-service/proto/user"
 	paymentProto "github.com/jackson6/gcic-service/payment-service/proto/payment"
+	pb "github.com/jackson6/gcic-service/user-service/proto/user"
 	"github.com/micro/go-micro/broker"
 	"golang.org/x/net/context"
-	"gopkg.in/mgo.v2"
 	"log"
 )
 
@@ -20,23 +19,16 @@ const topic = "user.created"
 // in the generated code itself for the exact method signatures etc
 // to give you a better idea.
 type service struct {
-	session *mgo.Session
+	repo Repository
 	firebase *firebase.App
 	PubSub broker.Broker
 	paymentClient paymentProto.PaymentServiceClient
-}
-
-func (s *service) GetRepo() Repository {
-	return &UserRepository{s.session.Clone()}
 }
 
 // CreateUser - we created just one method on our service,
 // which is a create method, which takes a context and a request as an
 // argument, these are handled by the gRPC server.
 func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response) error {
-	repo := s.GetRepo()
-	defer repo.Close()
-
 	charge := &paymentProto.Charge{
 		Amount: 30000,
 		Description: "Plan Description",
@@ -62,11 +54,10 @@ func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response)
 
 	if paymentResponse != nil {
 		// Save our user
-		user, err := repo.Create(req.User)
+		err := s.repo.Create(req.User)
 		if err != nil {
 			return err
 		}
-		res.User = user
 	}
 
 	// Return matching the `Response` message we created in our
@@ -75,10 +66,7 @@ func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response)
 }
 
 func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error {
-	repo := s.GetRepo()
-	defer repo.Close()
-
-	user, err := repo.Get(req)
+	user, err := s.repo.Get(req.Id)
 	if err != nil {
 		return err
 	}
@@ -86,11 +74,26 @@ func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error
 	return nil
 }
 
-func (s *service) All(ctx context.Context,req *pb.Request, res *pb.Response) error {
-	repo := s.GetRepo()
-	defer repo.Close()
+func (s *service) GetByEmail(ctx context.Context, req *pb.User, res *pb.Response) error {
+	user, err := s.repo.GetByEmail(req.Email)
+	if err != nil {
+		return err
+	}
+	res.User = user
+	return nil
+}
 
-	users, err := repo.All()
+func (s *service) GetUsers(ctx context.Context, req *pb.Id, res *pb.Response) error {
+	users, err := s.repo.GetUsers(req.Id)
+	if err != nil {
+		return err
+	}
+	res.Users = users
+	return nil
+}
+
+func (s *service) All(ctx context.Context,req *pb.Request, res *pb.Response) error {
+	users, err := s.repo.All()
 	if err !=nil {
 		return err
 	}
@@ -99,9 +102,6 @@ func (s *service) All(ctx context.Context,req *pb.Request, res *pb.Response) err
 }
 
 func (s *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Token) error {
-	repo := s.GetRepo()
-	defer repo.Close()
-
 	client, err := s.firebase.Auth(context.Background())
 	if err != nil {
 		return err
@@ -126,7 +126,7 @@ func (s *service) publishEvent(user *pb.User) error {
 	// Create a broker message
 	msg := &broker.Message{
 		Header: map[string]string{
-			"id": user.Id.Hex(),
+			"id": user.Id,
 		},
 		Body: body,
 	}

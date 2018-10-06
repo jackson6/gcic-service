@@ -7,7 +7,7 @@ import (
 	"os"
 
 	// Import the generated protobuf code
-	planService "github.com/jackson6/gcic-service/plan-service/proto/plan"
+	planService "github.com/jackson6/gcic-service/benefit-service/proto/benefit"
 )
 
 const (
@@ -51,7 +51,7 @@ func main() {
 	// Register our service with the gRPC server, this will tie our
 	// implementation into the auto-generated interface code for our
 	// protobuf definition.
-	planService.RegisterPlanServiceHandler(srv.Server(), &service{session})
+	planService.RegisterBenefitServiceHandler(srv.Server(), &service{session})
 
 	// Run the server
 	if err := srv.Run(); err != nil {
