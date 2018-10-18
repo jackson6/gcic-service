@@ -68,6 +68,7 @@ func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response)
 func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error {
 	user, err := s.repo.Get(req.Id)
 	if err != nil {
+		log.Println("error", err)
 		return err
 	}
 	res.User = user

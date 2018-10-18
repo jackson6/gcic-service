@@ -6,10 +6,6 @@ import (
 	"log"
 )
 
-const (
-	defaultHost = "mongo:27017"
-)
-
 func main() {
 
 	db, err := CreateSession()
@@ -25,6 +21,7 @@ func main() {
 		// here to add some context to the error.
 		log.Panicf("Could not connect to datastore - %v", err)
 	}
+	db.AutoMigrate(&paymentService.Transaction{})
 
 	repo := &PaymentRepository{db}
 
@@ -39,6 +36,6 @@ func main() {
 
 	// Run the server
 	if err := srv.Run(); err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 }

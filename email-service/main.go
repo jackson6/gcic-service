@@ -23,7 +23,7 @@ func main() {
 	}
 
 	srv := micro.NewService(
-		micro.Name("go.micro.srv.email"),
+		micro.Name("gcic.email"),
 		micro.Version("latest"),
 	)
 

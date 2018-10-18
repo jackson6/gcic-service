@@ -6,12 +6,19 @@ import (
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-web"
 	"log"
+	"net/http"
 	"os"
 )
 
 const (
 	defaultHost = "localhost:27017"
 )
+
+func test(w http.ResponseWriter, r *http.Request){
+	log.Println("method called...")
+	respondJSON(w, http.StatusOK, "test")
+}
+
 func main() {
 
 	// Database host from the environment variables
@@ -40,21 +47,25 @@ func main() {
 		web.Version("latest"),
 	)
 
-	srv.Init()
+	if err := srv.Init(); err != nil {
+		log.Fatal(err)
+	}
 
 	hub := newHub()
 
 	userClient := userService.NewUserServiceClient("gcic.user", client.DefaultClient)
-	service := service{session, hub, userClient}
+	services := newChatService(session, hub, userClient)
+	log.Println(services)
 
 	go hub.run()
 
 	// Register Handler
 	srv.HandleFunc("/chat", hub.handleWebSocket)
-	srv.HandleFunc("/online", service.Online)
+	srv.HandleFunc("/online", test)
 
 	// Run the server
 	if err := srv.Run(); err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
+
 }

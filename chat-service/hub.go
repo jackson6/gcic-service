@@ -57,7 +57,11 @@ func (hub *Hub) broadcastMessage(message interface{}, ignore *Client) {
 }
 
 func (hub *Hub) send(message interface{}, client *Client) {
-	data, _ := json.Marshal(message)
+	data, err := json.Marshal(message)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(string(data))
 	client.outbound <- data
 }
 
@@ -73,6 +77,7 @@ func (hub *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	hub.register <- client
 
 	go client.write()
+	go client.read()
 }
 
 func (hub *Hub) onConnect(client *Client) {
@@ -88,6 +93,7 @@ func (hub *Hub) onConnect(client *Client) {
 func (hub *Hub) onMessage(message []byte) {
 	hub.mutex.Lock()
 	defer hub.mutex.Unlock()
+	log.Println(string(message))
 
 	var msg pb.Message
 	err := json.Unmarshal(message, &msg)

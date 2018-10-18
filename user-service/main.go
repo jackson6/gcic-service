@@ -70,7 +70,7 @@ func main() {
 
 	// Run the server
 	if err := srv.Run(); err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 }
 

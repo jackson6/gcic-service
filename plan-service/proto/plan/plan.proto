@@ -15,11 +15,7 @@ message Plan {
     int64 amount = 2;
     string name = 3;
     string description = 4;
-    repeated Include includes = 5;
-}
-
-message Include {
-    string include = 1;
+    repeated string includes = 5;
 }
 
 message Request {}

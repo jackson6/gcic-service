@@ -5,6 +5,7 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
 	"github.com/jinzhu/gorm"
+	"log"
 )
 
 type Repository interface {
@@ -37,18 +38,19 @@ func (repo *UserRepository) All() ([]*pb.User, error) {
 }
 
 func (repo *UserRepository) Get(id string) (*pb.User, error) {
-	var user *pb.User
+	var user pb.User
 	user.Id = id
+	log.Println(user)
 	if err := repo.db.First(&user).Error; err != nil {
 		return nil, err
 	}
-	return user, nil
+	log.Println(user)
+	return &user, nil
 }
 
 func (repo *UserRepository) GetUsers(id []string) ([]*pb.User, error) {
 	users := []*pb.User{}
-	if err := repo.db.Where("id IN (?)", id).
-		Find(&users).Error; err != nil {
+	if err := repo.db.Where("id IN (?)", id).Find(&users).Error; err != nil {
 		return nil, err
 	}
 	return users, nil

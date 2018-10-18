@@ -45,6 +45,8 @@ func main() {
 		micro.Version("latest"),
 	)
 
+	srv.Init()
+
 	// Register our service with the gRPC server, this will tie our
 	// implementation into the auto-generated interface code for our
 	// protobuf definition.
@@ -52,7 +54,7 @@ func main() {
 
 	// Run the server
 	if err := srv.Run(); err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 }
 
