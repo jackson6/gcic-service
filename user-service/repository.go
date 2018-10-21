@@ -11,6 +11,7 @@ import (
 type Repository interface {
 	Create(*pb.User) error
 	Update(*pb.User) error
+	Delete(*pb.User) error
 	All() ([]*pb.User, error)
 	Get(string) (*pb.User, error)
 	GetByEmail(string) (*pb.User, error)
@@ -32,6 +33,14 @@ func (repo *UserRepository) Create(user *pb.User) error {
 // Create a new user
 func (repo *UserRepository) Update(user *pb.User) error {
 	if err := repo.db.Update(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// Delete a new user
+func (repo *UserRepository) Delete(user *pb.User) error {
+	if err := repo.db.Delete(user).Error; err != nil {
 		return err
 	}
 	return nil

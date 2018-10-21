@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
 	"encoding/json"
 	"golang.org/x/net/context"
-	"net/http"
+	"github.com/jackson6/gcic-service/service-client/lib"
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
 )
 
@@ -49,7 +50,9 @@ func UpdateUserEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, u
 		return
 	}
 
-	err := userService.Update(context.Background(), &update)
+	newUser := lib.UpdateBuilder(user, update)
+
+	_, err := userService.Update(context.Background(), newUser.(*pb.User))
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return

@@ -5,6 +5,7 @@ package user;
 service UserService {
     rpc Create(Request) returns (Response) {}
     rpc Update(User) returns (Response) {}
+    rpc Delete(User) returns (Response) {}
     rpc Get(User) returns (Response) {}
     rpc All(Request) returns (Response) {}
     rpc ValidateToken(Token) returns (Token) {}

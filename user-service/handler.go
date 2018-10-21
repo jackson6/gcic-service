@@ -73,6 +73,14 @@ func (s *service) Update(ctx context.Context, req *pb.User, res *pb.Response) er
 	return nil
 }
 
+func (s *service) Delete(ctx context.Context, req *pb.User, res *pb.Response) error {
+	err := s.repo.Delete(req)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error {
 	user, err := s.repo.Get(req.Id)
 	if err != nil {
