@@ -249,7 +249,6 @@
     "github.com/micro/go-micro/server",
     "golang.org/x/net/context",
     "gopkg.in/mgo.v2",
-    "gopkg.in/mgo.v2/bson",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

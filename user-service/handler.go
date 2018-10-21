@@ -65,6 +65,14 @@ func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response)
 	return nil
 }
 
+func (s *service) Update(ctx context.Context, req *pb.User, res *pb.Response) error {
+	err := s.repo.Update(req)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error {
 	user, err := s.repo.Get(req.Id)
 	if err != nil {

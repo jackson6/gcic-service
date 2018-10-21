@@ -2,9 +2,9 @@ build:
 	protoc -I. --go_out=plugins=micro:$(GOPATH)/src/github.com/jackson6/gcic-service/plan-service \
 	    proto/plan/plan.proto
 	GOOS=linux GOARCH=amd64 go build
-	sudo docker build -t plan-service .
+	docker build -t plan-service .
 run:
-	sudo docker run --net="host" \
+	docker run --net="host" \
 		-p 50051 \
 		-e MICRO_SERVER_ADDRESS=:50054 \
 		-e DISABLE_AUTH=false \

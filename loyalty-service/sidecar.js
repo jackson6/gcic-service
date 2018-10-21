@@ -2,7 +2,7 @@ const uuid4 = require('uuid/v4');
 const request = require('request');
 
 module.exports.register = function () {
-    let register_uri = "http://localhost:9080/registry";
+    let register_uri = "http://localhost:8081/registry";
     let service = "gcic.loyalty";
     let headers = {'content-type': 'application/json'};
     let payload = {

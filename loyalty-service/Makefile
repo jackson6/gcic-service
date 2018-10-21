@@ -1,3 +1,5 @@
 build:
-	protoc -I. --go_out=plugins=micro:$(GOPATH)/src/github.com/jackson6/gcic-service/loyalty-service \
-	    proto/loyalty/loyalty.proto
+	docker build -t loyalty-service .
+
+run:
+	docker run --network="host" -e MICRO_REGISTRY=mdns loyalty-service

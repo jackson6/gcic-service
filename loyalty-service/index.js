@@ -47,7 +47,7 @@ server.addService(loyaltyProto.LoyaltyService.service, {
 
 service.register();
 
-server.bind('0.0.0.0:50051',
+server.bind('127.0.0.1:50051',
     grpc.ServerCredentials.createInsecure());
 console.log('Server running at http://0.0.0.0:50051');
 server.start();
