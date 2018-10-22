@@ -9,18 +9,30 @@ import (
 	"github.com/micro/go-micro/client"
 	_ "github.com/micro/go-plugins/broker/nats"
 	"log"
+	"os"
 )
 
 const topic = "user.created"
 
+type SmtpServer struct {
+	host string
+	port string
+	password string
+	addr string
+}
+
 func main() {
 
+	host := os.Getenv("SMPT_HOST")
+	port := os.Getenv("SMTP_PORT")
+	addr := os.Getenv("SMTP_ADDR")
+	password := os.Getenv("SMTP_PASS")
 
-	// Connect to the remote SMTP server.
-	smptClient, err := CreateClient("smtp.gmail.com:465")
-	if err != nil {
-		log.Fatal(err)
+	if host == "" || port == "" || addr == "" || password == ""{
+		log.Fatal("missing email configuration")
 	}
+
+	smtpServer := SmtpServer{host:host, port:port, password:password, addr:addr}
 
 	srv := micro.NewService(
 		micro.Name("gcic.email"),
@@ -36,14 +48,14 @@ func main() {
 	}
 
 	// Subscribe to messages on the broker
-	_, err = pubsub.Subscribe(topic, func(p broker.Publication) error {
+	_, err := pubsub.Subscribe(topic, func(p broker.Publication) error {
 		var user *emailService.User
 		if err := json.Unmarshal(p.Message().Body, &user); err != nil {
 			return err
 		}
 		log.Println(user)
 		emailClient := emailService.NewEmailServiceClient("go.micro.srv.email", client.DefaultClient)
-		_, err := emailClient.Send(context.Background(), user)
+		_, err := emailClient.Welcome(context.Background(), user)
 		if err != nil {
 			return err
 		}
@@ -54,7 +66,7 @@ func main() {
 		log.Println(err)
 	}
 
-	emailService.RegisterEmailServiceHandler(srv.Server(), &service{smptClient})
+	emailService.RegisterEmailServiceHandler(srv.Server(), &service{&smtpServer})
 
 	// Run the server
 	if err := srv.Run(); err != nil {

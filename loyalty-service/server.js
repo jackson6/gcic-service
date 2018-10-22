@@ -1,10 +1,11 @@
-const express        = require('express');
-const bodyParser     = require('body-parser');
-const app            = express();
+const service        = require('./sidecar.js');
+const app             = require('./app');
+const http            = require('http');
+const port = parseInt(process.env.PORT, 10) || 50051;
 
-const port = 8000;
 
+service.register();
+app.set('port', port);
 
-app.listen(port, () => {
-    console.log('We are live on ' + port);
-});
+const server = http.createServer(app);
+server.listen(port);

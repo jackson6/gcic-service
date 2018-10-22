@@ -20,6 +20,31 @@ func (s *service) GetRepo() Repository {
 	return &PlanRepository{s.session.Clone()}
 }
 
+func toSinglePlan(plan *Plan) *pb.Plan {
+	resp := new(pb.Plan)
+	resp.Amount = plan.Amount
+	resp.Name = plan.Name
+	resp.Description = plan.Description
+	resp.Id = plan.Id.Hex()
+	resp.Includes = plan.Includes
+	return resp
+}
+
+func toMultitplePlan(plans []*Plan) []*pb.Plan {
+	data := make([]*pb.Plan, 0)
+	for _, plan := range plans {
+		resp := new(pb.Plan)
+		resp.Amount = plan.Amount
+		resp.Name = plan.Name
+		resp.Description = plan.Description
+		resp.Id = plan.Id.Hex()
+		resp.Includes = plan.Includes
+		data = append(data, resp)
+	}
+
+	return data
+}
+
 // CreateUser - we created just one method on our service,
 // which is a create method, which takes a context and a request as an
 // argument, these are handled by the gRPC server.
@@ -41,10 +66,13 @@ func (s *service) Get(ctx context.Context, req *pb.Plan, res *pb.Response) error
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	plan, err := repo.Get(req)
+	data, err := repo.Get(req)
 	if err != nil {
 		return err
 	}
+
+	plan := toSinglePlan(data)
+
 	res.Plan = plan
 	return nil
 }
@@ -53,10 +81,12 @@ func (s *service) All(ctx context.Context,req *pb.Request, res *pb.Response) err
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	plans, err := repo.All(req)
+	data, err := repo.All(req)
 	if err !=nil {
 		return err
 	}
+
+	plans := toMultitplePlan(data)
 	res.Plans = plans
 	return nil
 }

@@ -73,14 +73,6 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:5f24c0d76155b0117322dfa92f8ec53f5f29781c50ccfc112eef0be1ff150ae3"
-  name = "github.com/jackson6/gcic-service"
-  packages = ["user-service/proto/user"]
-  pruneopts = "UT"
-  revision = "efb2168f40cb86889e8e23bfdf4dbe8ca65e9778"
-
-[[projects]]
-  branch = "master"
   digest = "1:0d3455926b7b805da0ba04fe325ad7662f47c0b6522500a2d787667e2fb6e463"
   name = "github.com/micro/cli"
   packages = ["."]
@@ -265,10 +257,12 @@
   input-imports = [
     "github.com/golang/protobuf/proto",
     "github.com/gorilla/websocket",
-    "github.com/jackson6/gcic-service/user-service/proto/user",
     "github.com/micro/go-micro/client",
+    "github.com/micro/go-micro/server",
     "github.com/micro/go-web",
+    "golang.org/x/net/context",
     "gopkg.in/mgo.v2",
+    "gopkg.in/mgo.v2/bson",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

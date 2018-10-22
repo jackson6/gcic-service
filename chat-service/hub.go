@@ -21,15 +21,17 @@ type Hub struct {
 	broadcast  chan []byte
 	register   chan *Client
 	unregister chan *Client
+	repo 	   *ChatRepository
 	mutex      *sync.Mutex
 }
 
-func newHub() *Hub {
+func newHub(repo *ChatRepository) *Hub {
 	return &Hub{
 		clients:    make(map[string]*Client),
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
+		repo: 		repo,
 		mutex:      &sync.Mutex{},
 	}
 }
@@ -56,13 +58,13 @@ func (hub *Hub) broadcastMessage(message interface{}, ignore *Client) {
 	}
 }
 
-func (hub *Hub) send(message interface{}, client *Client) {
+func (hub *Hub) send(message *pb.Message, client *Client) {
 	data, err := json.Marshal(message)
 	if err != nil {
 		log.Println(err)
 	}
-	log.Println(string(data))
 	client.outbound <- data
+	go hub.repo.Save(message)
 }
 
 func (hub *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
@@ -73,7 +75,9 @@ func (hub *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := r.URL.Query().Get("id")
-	client := newClient(hub, socket, id)
+	name := r.URL.Query().Get("name")
+	img := r.URL.Query().Get("img")
+	client := newClient(hub, socket, id, name, img)
 	hub.register <- client
 
 	go client.write()
@@ -103,7 +107,7 @@ func (hub *Hub) onMessage(message []byte) {
 	log.Println("new message to: ", msg.To)
 
 	to := hub.clients[msg.To]
-	hub.send(msg, to)
+	hub.send(&msg, to)
 }
 
 func (hub *Hub) onDisconnect(client *Client) {
@@ -115,4 +119,30 @@ func (hub *Hub) onDisconnect(client *Client) {
 
 	// Delete client from list
 	delete(hub.clients, client.id)
+}
+
+func (hub *Hub) online(w http.ResponseWriter, r *http.Request) {
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: hub.clients,
+	}
+	log.Println(response)
+	RespondJSON(w, http.StatusOK, response)
+}
+
+func (hub *Hub) messages(w http.ResponseWriter, r *http.Request) {
+	from := r.URL.Query().Get("from")
+	to := r.URL.Query().Get("to")
+	messages, err := hub.repo.Get(&pb.Message{From:from, To:to})
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+	}
+
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: messages,
+	}
+	RespondJSON(w, http.StatusOK, response)
 }

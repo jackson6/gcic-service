@@ -3,6 +3,20 @@ version: '3.1'
 
 services:
 
+  email-service:
+    build: ./email-service
+    network_mode: "host"
+    ports:
+    - 50052:50051
+    environment:
+      MICRO_ADDRESS: ":50051"
+      MICRO_REGISTRY: "mdns"
+      STRIPE_KEY: "sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
+      SMPT_HOST: "smtp.gmail.com"
+      SMTP_PORT: "465"
+      SMTP_ADDR: "odanejackson12@gmail.com"
+      SMTP_PASS: "dreamer6"
+
   payment-service:
     build: ./payment-service
     network_mode: "host"
@@ -78,16 +92,16 @@ services:
       DB_HOST: "127.0.0.1:27017"
       DISABLE_AUTH: "true"
 
-#  loyalty-service:
-#    build: ./loyalty-service
-#    network_mode: "host"
-#    ports:
-#    - 50058:50051
-#    environment:
-#      MICRO_ADDRESS: ":50051"
-#      NAME_SPACE: "org.gcic.mynetwork"
-#      MICRO_REGISTRY: "mdns"
-#      DISABLE_AUTH: "true"
+  loyalty-service:
+    build: ./loyalty-service
+    network_mode: "host"
+    ports:
+    - 50058:50051
+    environment:
+      MICRO_ADDRESS: ":50051"
+      NAME_SPACE: "org.gcic.mynetwork"
+      MICRO_REGISTRY: "mdns"
+      DISABLE_AUTH: "true"
 
   service-cli:
     build: ./service-client

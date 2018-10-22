@@ -3,7 +3,16 @@ syntax = "proto3";
 package go.micro.srv.email;
 
 service EmailService {
-    rpc Send(User) returns (Response) {}
+    rpc Contact(ContactUs) returns (Response) {}
+    rpc Welcome(User) returns (Response) {}
+}
+
+message ContactUs {
+    string name = 1;
+    string email = 2;
+    string phone = 3;
+    string company = 4;
+    string message = 5;
 }
 
 message User {

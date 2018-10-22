@@ -2,6 +2,11 @@ syntax = "proto3";
 
 package chat;
 
+service ChatService {
+    rpc Online(Request) returns (Response) {}
+    rpc Messages(User) returns(Response) {}
+}
+
 message Message {
     string id = 1;
     string from = 2;
@@ -9,4 +14,21 @@ message Message {
     string text = 4;
 }
 
-message Response {}
+message User {
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string img = 4;
+}
+
+message Error {
+    int32 code = 1;
+    string description = 2;
+}
+
+message Response {
+    repeated Message messages = 1;
+    repeated User users = 2;
+}
+
+message Request {}

@@ -5,6 +5,7 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -14,8 +15,8 @@ const (
 
 type Repository interface {
 	Create(*pb.Plan) (*pb.Plan, error)
-	All(*pb.Request) ([]*pb.Plan, error)
-	Get(*pb.Plan) (*pb.Plan, error)
+	All(*pb.Request) ([]*Plan, error)
+	Get(*pb.Plan) (*Plan, error)
 	Delete(*pb.Plan) error
 	Update(*pb.Plan) error
 	Close()
@@ -23,6 +24,14 @@ type Repository interface {
 
 type PlanRepository struct {
 	session *mgo.Session
+}
+
+type Plan struct {
+	Id bson.ObjectId `bson:"_id"json:"id"`
+	Amount int64 `bson:"amount"json:"amount"`
+	Description string `bson:"description"json:"description"`
+	Name string `bson:"name"json:"name"`
+	Includes []string `bson:"includes"json:"includes"`
 }
 
 // Create a new user
@@ -35,8 +44,8 @@ func (repo *PlanRepository) Create(plan *pb.Plan)  (*pb.Plan, error) {
 }
 
 // GetAll users
-func (repo *PlanRepository) All(request *pb.Request) ([]*pb.Plan, error) {
-	var plans []*pb.Plan
+func (repo *PlanRepository) All(request *pb.Request) ([]*Plan, error) {
+	var plans []*Plan
 	// Find normally takes a query, but as we want everything, we can nil this.
 	// We then bind our consignments variable by passing it as an argument to .All().
 	// That sets consignments to the result of the find query.
@@ -45,8 +54,9 @@ func (repo *PlanRepository) All(request *pb.Request) ([]*pb.Plan, error) {
 	return plans, err
 }
 
-func (repo *PlanRepository) Get(plan *pb.Plan) (*pb.Plan, error) {
-	err := repo.collection().FindId(plan.Id).One(&plan)
+func (repo *PlanRepository) Get(req *pb.Plan) (*Plan, error) {
+	plan := new(Plan)
+	err := repo.collection().FindId(bson.ObjectId(req.Id)).One(&plan)
 	if err != nil {
 		return nil, err
 	}

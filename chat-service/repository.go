@@ -3,6 +3,7 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/chat-service/proto/chat"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -11,34 +12,33 @@ const (
 )
 
 type Repository interface {
-	Save(*pb.Message) (*pb.Message, error)
-	Online() []string
+	Get(*pb.User) (*pb.Message, error)
+	Save(*pb.Message) error
 	Close()
 }
 
 type ChatRepository struct {
 	session *mgo.Session
-	hub *Hub
 }
 
-// Create a new user
-func (repo *ChatRepository) Save(message *pb.Message)  (*pb.Message, error) {
-	err := repo.collection().Insert(message)
+
+
+func (repo *ChatRepository) Get(message *pb.Message) ([]*pb.Message, error) {
+	var messages []*pb.Message
+	// Find normally takes a query, but as we want everything, we can nil this.
+	// We then bind our consignments variable by passing it as an argument to .All().
+	// That sets consignments to the result of the find query.
+	// There's also a `One()` function for single results.
+	err := repo.collection().Find(bson.M{"from": message.From, "to": message.To}).All(&messages)
+	return messages, err
+}
+
+func (repo *ChatRepository) Save(messagge *pb.Message) error {
+	err := repo.collection().Insert(messagge)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return message, nil
-}
-
-// Get all online new user
-func (repo *ChatRepository) Online() []string {
-	clients := repo.clients()
-	var online []string
-
-	for id, _ := range clients {
-		online = append(online, id)
-	}
-	return online
+	return nil
 }
 
 // Close closes the database session after each query has ran.
@@ -56,8 +56,4 @@ func (repo *ChatRepository) Close() {
 
 func (repo *ChatRepository) collection() *mgo.Collection {
 	return repo.session.DB(dbName).C(chatCollection)
-}
-
-func (repo *ChatRepository) clients() map[string]*Client {
-	return repo.hub.clients
 }

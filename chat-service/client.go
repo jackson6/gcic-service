@@ -29,14 +29,18 @@ var (
 type Client struct {
 	hub      *Hub
 	id       string
+	name     string
+	img      string
 	socket   *websocket.Conn
 	outbound chan []byte
 }
 
-func newClient(hub *Hub, socket *websocket.Conn, id string) *Client {
+func newClient(hub *Hub, socket *websocket.Conn, id, name, img string) *Client {
 	return &Client{
 		hub:      hub,
 		id:       id,
+		name:	  name,
+		img:	  img,
 		socket:   socket,
 		outbound: make(chan []byte),
 	}

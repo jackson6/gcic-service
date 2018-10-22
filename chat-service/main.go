@@ -2,22 +2,14 @@
 package main
 
 import (
-	userService "github.com/jackson6/gcic-service/user-service/proto/user"
-	"github.com/micro/go-micro/client"
 	"github.com/micro/go-web"
 	"log"
-	"net/http"
 	"os"
 )
 
 const (
 	defaultHost = "localhost:27017"
 )
-
-func test(w http.ResponseWriter, r *http.Request){
-	log.Println("method called...")
-	respondJSON(w, http.StatusOK, "test")
-}
 
 func main() {
 
@@ -42,6 +34,8 @@ func main() {
 		log.Panicf("Could not connect to datastore with host %s - %v", host, err)
 	}
 
+	repo := &ChatRepository{session}
+
 	srv := web.NewService(
 		web.Name("gcic.chat"),
 		web.Version("latest"),
@@ -51,17 +45,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	hub := newHub()
-
-	userClient := userService.NewUserServiceClient("gcic.user", client.DefaultClient)
-	services := newChatService(session, hub, userClient)
-	log.Println(services)
+	hub := newHub(repo)
 
 	go hub.run()
 
 	// Register Handler
 	srv.HandleFunc("/chat", hub.handleWebSocket)
-	srv.HandleFunc("/online", test)
+	srv.HandleFunc("/online", hub.online)
+	srv.HandleFunc("/message", hub.messages)
 
 	// Run the server
 	if err := srv.Run(); err != nil {
