@@ -1,37 +1,37 @@
 package handler
 
 import (
-	"encoding/json"
-	"github.com/jackson6/gcic-service/service-client/lib"
 	"net/http"
+	"encoding/json"
 	"golang.org/x/net/context"
-	pb "github.com/jackson6/gcic-service/partner-service/proto/partner"
+	"github.com/jackson6/gcic-service/service-client/lib"
 	"github.com/jackson6/gcic-service/service-client/client"
+	pb "github.com/jackson6/gcic-service/benefit-service/proto/benefit"
 )
 
-func GetPartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
+func GetBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()
-	resp, err := service.Partner.All(context.Background(), &pb.Request{})
+	resp, err := service.Benefit.All(context.Background(), &pb.Request{})
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
-	return
+		return
 	}
 	response := HttpResponse{
 		ResultCode: 200,
 		CodeContent: "Success",
-		Data: resp.Partners,
+		Data: resp.Benefits,
 	}
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
+func CreateBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()
-	partner := new(pb.Partner)
-	if err := json.NewDecoder(r.Body).Decode(&partner); err != nil {
+	benefit := new(pb.Benefit)
+	if err := json.NewDecoder(r.Body).Decode(&benefit); err != nil {
 		RespondError(w, http.StatusBadRequest, BadRequest, err)
 		return
 	}
-	resp, err := service.Partner.Create(context.Background(), partner)
+	resp, err := service.Benefit.Create(context.Background(), benefit)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -39,29 +39,29 @@ func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 	response := HttpResponse{
 		ResultCode: 200,
 		CodeContent: "Success",
-		Data: resp.Partner,
+		Data: resp.Benefit,
 	}
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func UpdatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client){
+func UpdateBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client){
 	defer r.Body.Close()
 
-	var update pb.Partner
+	var update pb.Benefit
 	if err := json.NewDecoder(r.Body).Decode(&update); err != nil {
 		RespondError(w, http.StatusBadRequest, BadRequest, err)
 		return
 	}
 
-	resp, err := service.Partner.Get(context.Background(), &update)
+	resp, err := service.Benefit.Get(context.Background(), &update)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
 	}
 
-	newUser := lib.UpdateBuilder(resp.Partner, update)
+	newUser := lib.UpdateBuilder(resp.Benefit, update)
 
-	_, err = service.Partner.Update(context.Background(), newUser.(*pb.Partner))
+	_, err = service.Benefit.Update(context.Background(), newUser.(*pb.Benefit))
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -74,15 +74,15 @@ func UpdatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func DeletePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
+func DeleteBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()
-	partner := new(pb.Partner)
-	if err := json.NewDecoder(r.Body).Decode(&partner); err != nil {
+	benefit := new(pb.Benefit)
+	if err := json.NewDecoder(r.Body).Decode(&benefit); err != nil {
 		RespondError(w, http.StatusBadRequest, BadRequest, err)
 		return
 	}
 
-	_, err := service.Partner.Delete(context.Background(), partner)
+	_, err := service.Benefit.Delete(context.Background(), benefit)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return

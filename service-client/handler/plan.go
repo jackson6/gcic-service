@@ -1,16 +1,17 @@
 package handler
 
 import (
-	"net/http"
 	"encoding/json"
-	"golang.org/x/net/context"
-	"github.com/jackson6/gcic-service/service-client/lib"
 	pb "github.com/jackson6/gcic-service/plan-service/proto/plan"
+	"github.com/jackson6/gcic-service/service-client/lib"
+	"github.com/jackson6/gcic-service/service-client/client"
+	"golang.org/x/net/context"
+	"net/http"
 )
 
-func GetPlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.PlanServiceClient) {
+func GetPlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()
-	resp, err := planService.All(context.Background(), &pb.Request{})
+	resp, err := service.Plan.All(context.Background(), &pb.Request{})
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -23,14 +24,14 @@ func GetPlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.Plan
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func CreatePlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.PlanServiceClient) {
+func CreatePlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()
 	plan := new(pb.Plan)
 	if err := json.NewDecoder(r.Body).Decode(&plan); err != nil {
 		RespondError(w, http.StatusBadRequest, BadRequest, err)
 		return
 	}
-	resp, err := planService.Create(context.Background(), plan)
+	resp, err := service.Plan.Create(context.Background(), plan)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -43,7 +44,7 @@ func CreatePlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.P
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func UpdatePlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.PlanServiceClient){
+func UpdatePlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client){
 	defer r.Body.Close()
 
 	var update pb.Plan
@@ -52,7 +53,7 @@ func UpdatePlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.P
 		return
 	}
 
-	resp, err := planService.Get(context.Background(), &update)
+	resp, err := service.Plan.Get(context.Background(), &update)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -61,7 +62,7 @@ func UpdatePlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.P
 	plan := lib.UpdateBuilder(resp.Plan, update)
 
 
-	_, err = planService.Update(context.Background(), plan.(*pb.Plan))
+	_, err = service.Plan.Update(context.Background(), plan.(*pb.Plan))
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -74,7 +75,7 @@ func UpdatePlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.P
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func DeletePlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.PlanServiceClient) {
+func DeletePlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()
 	plan := new(pb.Plan)
 	if err := json.NewDecoder(r.Body).Decode(&plan); err != nil {
@@ -82,7 +83,7 @@ func DeletePlanEndPoint(w http.ResponseWriter, r *http.Request, planService pb.P
 		return
 	}
 
-	_, err := planService.Create(context.Background(), plan)
+	_, err := service.Plan.Create(context.Background(), plan)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return

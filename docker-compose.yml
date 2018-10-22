@@ -12,7 +12,7 @@ services:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
       STRIPE_KEY: "sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
-      DB_NAME: "gcic"
+      DB_NAME: "postgres"
       DB_HOST: "127.0.0.1"
       DB_PORT: "5432"
       DB_USER: "postgres"
@@ -27,7 +27,7 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_NAME: "gcic"
+      DB_NAME: "postgres"
       DB_HOST: "127.0.0.1"
       DB_PORT: "5432"
       DB_USER: "postgres"
@@ -36,12 +36,13 @@ services:
 
   plan-service:
     build: ./plan-service
+    network_mode: "host"
     ports:
     - 50054:50051
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "datastore:27017"
+      DB_HOST: "127.0.0.1:27017"
       DISABLE_AUTH: "true"
 
   partner-service:
@@ -77,19 +78,21 @@ services:
       DB_HOST: "127.0.0.1:27017"
       DISABLE_AUTH: "true"
 
-  loyalty-service:
-    build: ./loyalty-service
-    network_mode: "host"
-    ports:
-    - 50058:50051
-    environment:
-      MICRO_ADDRESS: ":50051"
-      NAME_SPACE: "org.gcic.mynetwork"
-      MICRO_REGISTRY: "mdns"
-      DISABLE_AUTH: "true"
+#  loyalty-service:
+#    build: ./loyalty-service
+#    network_mode: "host"
+#    ports:
+#    - 50058:50051
+#    environment:
+#      MICRO_ADDRESS: ":50051"
+#      NAME_SPACE: "org.gcic.mynetwork"
+#      MICRO_REGISTRY: "mdns"
+#      DISABLE_AUTH: "true"
 
-  loyalty-cli:
-    build: ./loyalty-cli
+  service-cli:
+    build: ./service-client
+    ports:
+    - 3000:3000
     network_mode: "host"
     environment:
       MICRO_REGISTRY: "mdns"
@@ -101,6 +104,7 @@ services:
     - 5432:5432
 
   datastore:
+    network_mode: "host"
     image: mongo
     ports:
     - 27017:27017

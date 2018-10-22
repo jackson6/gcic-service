@@ -18,7 +18,7 @@ type Client struct {
 	Partner partnerService.PartnerServiceClient
 	Payment paymentService.PaymentServiceClient
 	Plan planService.PlanServiceClient
-	Benifit benefitService.BenefitServiceClient
+	Benefit benefitService.BenefitServiceClient
 	Loyalty loyaltyService.LoyaltyServiceClient
 }
 
@@ -28,7 +28,7 @@ func (c *Client) NewClient() *Client {
 	c.Partner = partnerService.NewPartnerServiceClient("gcic.partner", microclient.DefaultClient)
 	c.Payment = paymentService.NewPaymentServiceClient("gcic.payment", microclient.DefaultClient)
 	c.Plan = planService.NewPlanServiceClient("gcic.plan", microclient.DefaultClient)
-	c.Benifit = benefitService.NewBenefitServiceClient("gcic.benefit", microclient.DefaultClient)
+	c.Benefit = benefitService.NewBenefitServiceClient("gcic.benefit", microclient.DefaultClient)
 	c.Loyalty = loyaltyService.NewLoyaltyServiceClient("gcic.loyalty", microclient.DefaultClient)
 	return c
 }
