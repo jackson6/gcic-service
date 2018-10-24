@@ -12,7 +12,6 @@ import (
 	"os"
 
 	paymentService "github.com/jackson6/gcic-service/payment-service/proto/payment"
-	// Import the generated protobuf code
 	userService "github.com/jackson6/gcic-service/user-service/proto/user"
 )
 

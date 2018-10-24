@@ -2,12 +2,32 @@ package handler
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	pb "github.com/jackson6/gcic-service/plan-service/proto/plan"
-	"github.com/jackson6/gcic-service/service-client/lib"
 	"github.com/jackson6/gcic-service/service-client/client"
+	"github.com/jackson6/gcic-service/service-client/lib"
 	"golang.org/x/net/context"
 	"net/http"
 )
+
+func GetSingleEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
+	defer r.Body.Close()
+
+	params := mux.Vars(r)
+	id := params["id"]
+
+	resp, err := service.Plan.Get(context.Background(), &pb.Plan{Id:id})
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: resp.Plans,
+	}
+	RespondJSON(w, http.StatusOK, response)
+}
 
 func GetPlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()

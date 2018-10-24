@@ -53,8 +53,7 @@ func main() {
 		if err := json.Unmarshal(p.Message().Body, &user); err != nil {
 			return err
 		}
-		log.Println(user)
-		emailClient := emailService.NewEmailServiceClient("go.micro.srv.email", client.DefaultClient)
+		emailClient := emailService.NewEmailServiceClient("gcic.email", client.DefaultClient)
 		_, err := emailClient.Welcome(context.Background(), user)
 		if err != nil {
 			return err

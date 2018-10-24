@@ -56,7 +56,7 @@ func (repo *PlanRepository) All(request *pb.Request) ([]*Plan, error) {
 
 func (repo *PlanRepository) Get(req *pb.Plan) (*Plan, error) {
 	plan := new(Plan)
-	err := repo.collection().FindId(bson.ObjectId(req.Id)).One(&plan)
+	err := repo.collection().FindId(bson.ObjectIdHex(req.Id)).One(&plan)
 	if err != nil {
 		return nil, err
 	}

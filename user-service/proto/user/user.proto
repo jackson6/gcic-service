@@ -41,6 +41,7 @@ message User {
     string stripe_id = 21;
     string plan_id = 22;
     string referral_code = 23;
+    string profile_pic = 24;
 }
 
 message Token {

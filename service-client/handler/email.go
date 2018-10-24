@@ -22,7 +22,7 @@ func ContactUsEndPoint(w http.ResponseWriter, r *http.Request, service *client.C
 	}
 	response := HttpResponse{
 		ResultCode: 200,
-		CodeContent: "Success"
+		CodeContent: "Success",
 	}
 	RespondJSON(w, http.StatusOK, response)
 }

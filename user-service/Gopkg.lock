@@ -46,6 +46,14 @@
   revision = "3df31a1ada83e310c2e24b267c8e8b68836547b4"
 
 [[projects]]
+  branch = "master"
+  digest = "1:74e615c09a41ec582b055bd6e7a33e9b82adee37827cd09100b3a957f4dfe6b6"
+  name = "github.com/asim/go-file"
+  packages = ["proto"]
+  pruneopts = "UT"
+  revision = "978f4a541c86063afe3f3504ab5343180816ed14"
+
+[[projects]]
   digest = "1:4be5d1a52c61b74c0a4d62f37c0640f706ae6e07eb73617dd013990d565717d5"
   name = "github.com/go-log/log"
   packages = [
@@ -169,6 +177,14 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "8b9d33ec2f19cfe2fe9f448f18b033c004c18fd2"
+
+[[projects]]
+  branch = "master"
+  digest = "1:023c11ccdca42ed867bfb9511f6ac2ade0cd5aa34a85eed805675fd07099d2dd"
+  name = "github.com/micro/go-file"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "978f4a541c86063afe3f3504ab5343180816ed14"
 
 [[projects]]
   branch = "master"
@@ -497,6 +513,7 @@
     "github.com/jackson6/gcic-service/payment-service/proto/payment",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",
+    "github.com/micro/go-file",
     "github.com/micro/go-micro",
     "github.com/micro/go-micro/broker",
     "github.com/micro/go-micro/client",

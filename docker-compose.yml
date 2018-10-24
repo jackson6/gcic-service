@@ -11,11 +11,10 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      STRIPE_KEY: "sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
       SMPT_HOST: "smtp.gmail.com"
       SMTP_PORT: "465"
       SMTP_ADDR: "odanejackson12@gmail.com"
-      SMTP_PASS: "dreamer6"
+      SMTP_PASS: "madhead1"
 
   payment-service:
     build: ./payment-service

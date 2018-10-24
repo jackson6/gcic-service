@@ -103,3 +103,16 @@ func RefreshMembershipEndPoint(w http.ResponseWriter, r *http.Request, user *pb.
 	}
 	RespondJSON(w, http.StatusOK, response)
 }
+
+func UploadPrifilePicEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client){
+
+	user.
+	upade := pb.User{}
+	newUser := lib.UpdateBuilder(user, update)
+
+	_, err := service.User.Update(context.Background(), newUser.(*pb.User))
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+}
