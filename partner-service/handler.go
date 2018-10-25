@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	pb "github.com/jackson6/gcic-service/partner-service/proto/partner"
 	"gopkg.in/mgo.v2"
 )
@@ -20,6 +21,28 @@ type service struct {
 
 func (s *service) GetRepo() Repository {
 	return &PartnerRepository{s.session.Clone()}
+}
+
+func converter(data interface{}, dataType int) (interface{}, error){
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	if dataType == 0 {
+		benefit := new(pb.Partner)
+		err = json.Unmarshal(jsonData, &benefit)
+		if err != nil {
+			return nil, err
+		}
+		return benefit, nil
+	} else {
+		benefits := make([]*pb.Partner, 0)
+		err = json.Unmarshal(jsonData, &benefits)
+		if err != nil {
+			return nil, err
+		}
+		return benefits, nil
+	}
 }
 
 // CreateUser - we created just one method on our service,
@@ -45,11 +68,17 @@ func (s *service) Get(ctx context.Context, req *pb.Partner, res *pb.Response) er
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	partner, err := repo.Get(req)
+	data, err := repo.Get(req)
 	if err != nil {
 		return err
 	}
-	res.Partner = partner
+
+	partner, err := converter(data,0)
+	if err != nil {
+		return err
+	}
+
+	res.Partner = partner.(*pb.Partner)
 	return nil
 }
 
@@ -57,11 +86,17 @@ func (s *service) All(ctx context.Context,req *pb.Request, res *pb.Response) err
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	partners, err := repo.All()
+	data, err := repo.All()
 	if err !=nil {
 		return err
 	}
-	res.Partners = partners
+
+	partners, err := converter(data,1)
+	if err != nil {
+		return err
+	}
+
+	res.Partners = partners.([]*pb.Partner)
 	return nil
 }
 

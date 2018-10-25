@@ -12,9 +12,12 @@ service PartnerService {
 
 message Partner {
     string id = 1;
-    string location = 2;
-    string contact = 3;
-    string img = 4;
+    string name = 2;
+    string address = 3;
+    string parish = 4;
+    string country = 5;
+    string contact = 6;
+    string img = 7;
 }
 
 message Request {}

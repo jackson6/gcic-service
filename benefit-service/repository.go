@@ -5,6 +5,7 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/benefit-service/proto/benefit"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -12,13 +13,25 @@ const (
 	benefitCollection = "benefits"
 )
 
+
+
 type Repository interface {
 	Create(*pb.Benefit) (*pb.Benefit, error)
-	All(*pb.Request) ([]*pb.Benefit, error)
-	Get(*pb.Benefit) (*pb.Benefit, error)
+	All(*pb.Request) ([]*Benefit, error)
+	Get(*pb.Benefit) (*Benefit, error)
 	Delete(*pb.Benefit) error
 	Update(*pb.Benefit) error
 	Close()
+}
+
+type Benefit struct {
+	Id bson.ObjectId `bson:"_id"json:"id"`
+	Title string `bson:"title"json:"title"`
+	Name string `bson:"name"json:"name"`
+	Description string `bson:"description"json:"description"`
+	Contact string `bson:"contact"json:"contact"`
+	Address string `bson:"address"json:"address"`
+	Img []string `bson:"img"json:"img"`
 }
 
 type BenefitRepository struct {
@@ -35,8 +48,8 @@ func (repo *BenefitRepository) Create(benefit *pb.Benefit)  (*pb.Benefit, error)
 }
 
 // GetAll users
-func (repo *BenefitRepository) All(request *pb.Request) ([]*pb.Benefit, error) {
-	var benefits []*pb.Benefit
+func (repo *BenefitRepository) All(request *pb.Request) ([]*Benefit, error) {
+	var benefits []*Benefit
 	// Find normally takes a query, but as we want everything, we can nil this.
 	// We then bind our consignments variable by passing it as an argument to .All().
 	// That sets consignments to the result of the find query.
@@ -45,16 +58,17 @@ func (repo *BenefitRepository) All(request *pb.Request) ([]*pb.Benefit, error) {
 	return benefits, err
 }
 
-func (repo *BenefitRepository) Get(benefit *pb.Benefit) (*pb.Benefit, error) {
-	err := repo.collection().FindId(benefit.Id).One(&benefit)
+func (repo *BenefitRepository) Get(benefit *pb.Benefit) (*Benefit, error) {
+	data := new(Benefit)
+	err := repo.collection().FindId(bson.ObjectIdHex(benefit.Id)).One(&data)
 	if err != nil {
 		return nil, err
 	}
-	return benefit, nil
+	return data, nil
 }
 
 func (repo *BenefitRepository) Delete(benefit *pb.Benefit) (error) {
-	err := repo.collection().Remove(benefit.Id)
+	err := repo.collection().RemoveId(bson.ObjectIdHex(benefit.Id))
 	if err != nil {
 		return err
 	}
@@ -62,7 +76,7 @@ func (repo *BenefitRepository) Delete(benefit *pb.Benefit) (error) {
 }
 
 func (repo *BenefitRepository) Update(benefit *pb.Benefit) (error) {
-	err := repo.collection().Update(benefit.Id, &benefit)
+	err := repo.collection().Update(bson.ObjectIdHex(benefit.Id), &benefit)
 	if err != nil {
 		return err
 	}

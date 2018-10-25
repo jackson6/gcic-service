@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/json"
 	pb "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	"golang.org/x/net/context"
 	"gopkg.in/mgo.v2"
@@ -20,29 +21,26 @@ func (s *service) GetRepo() Repository {
 	return &PlanRepository{s.session.Clone()}
 }
 
-func toSinglePlan(plan *Plan) *pb.Plan {
-	resp := new(pb.Plan)
-	resp.Amount = plan.Amount
-	resp.Name = plan.Name
-	resp.Description = plan.Description
-	resp.Id = plan.Id.Hex()
-	resp.Includes = plan.Includes
-	return resp
-}
-
-func toMultitplePlan(plans []*Plan) []*pb.Plan {
-	data := make([]*pb.Plan, 0)
-	for _, plan := range plans {
-		resp := new(pb.Plan)
-		resp.Amount = plan.Amount
-		resp.Name = plan.Name
-		resp.Description = plan.Description
-		resp.Id = plan.Id.Hex()
-		resp.Includes = plan.Includes
-		data = append(data, resp)
+func converter(data interface{}, dataType int) (interface{}, error){
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
 	}
-
-	return data
+	if dataType == 0 {
+		benefit := new(pb.Plan)
+		err = json.Unmarshal(jsonData, &benefit)
+		if err != nil {
+			return nil, err
+		}
+		return benefit, nil
+	} else {
+		benefits := make([]*pb.Plan, 0)
+		err = json.Unmarshal(jsonData, &benefits)
+		if err != nil {
+			return nil, err
+		}
+		return benefits, nil
+	}
 }
 
 // CreateUser - we created just one method on our service,
@@ -71,9 +69,12 @@ func (s *service) Get(ctx context.Context, req *pb.Plan, res *pb.Response) error
 		return err
 	}
 
-	plan := toSinglePlan(data)
+	plan, err := converter(data,0)
+	if err != nil {
+		return err
+	}
 
-	res.Plan = plan
+	res.Plan = plan.(*pb.Plan)
 	return nil
 }
 
@@ -86,8 +87,13 @@ func (s *service) All(ctx context.Context,req *pb.Request, res *pb.Response) err
 		return err
 	}
 
-	plans := toMultitplePlan(data)
-	res.Plans = plans
+	plans, err := converter(data, 1)
+	if err != nil {
+		return err
+	}
+
+	res.Plans = plans.([]*pb.Plan)
+
 	return nil
 }
 

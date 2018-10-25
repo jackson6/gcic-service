@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"cloud.google.com/go/storage"
 	"encoding/json"
+	"fmt"
 	"github.com/jackson6/gcic-service/service-client/lib"
 	"net/http"
 	"golang.org/x/net/context"
@@ -24,13 +26,26 @@ func GetPartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
+func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client, bucket *storage.BucketHandle, bucketName string) {
 	defer r.Body.Close()
-	partner := new(pb.Partner)
-	if err := json.NewDecoder(r.Body).Decode(&partner); err != nil {
-		RespondError(w, http.StatusBadRequest, BadRequest, err)
+
+	r.ParseForm()
+	partner := pb.Partner{
+		Name: r.FormValue("name"),
+		Address: r.FormValue("address"),
+		Parish: r.FormValue("parish"),
+		Country: r.FormValue("country"),
+		Contact: r.FormValue("contact"),
+	}
+
+	imgUrl, err := lib.UploadFileFromForm(r, bucket, bucketName)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
 	}
+
+	partner.Img = imgUrl
+
 	resp, err := service.Partner.Create(context.Background(), partner)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
@@ -59,9 +74,10 @@ func UpdatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 		return
 	}
 
-	newUser := lib.UpdateBuilder(resp.Partner, update)
+	updated := lib.UpdateBuilder(resp.Partner, update)
+	newPartner := updated.(pb.Partner)
 
-	_, err = service.Partner.Update(context.Background(), newUser.(*pb.Partner))
+	_, err = service.Partner.Update(context.Background(), &newPartner)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return

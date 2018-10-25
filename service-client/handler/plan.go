@@ -67,22 +67,22 @@ func CreatePlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.
 func UpdatePlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client){
 	defer r.Body.Close()
 
-	var update pb.Plan
+	update := new(pb.Plan)
 	if err := json.NewDecoder(r.Body).Decode(&update); err != nil {
 		RespondError(w, http.StatusBadRequest, BadRequest, err)
 		return
 	}
 
-	resp, err := service.Plan.Get(context.Background(), &update)
+	resp, err := service.Plan.Get(context.Background(), update)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
 	}
 
-	plan := lib.UpdateBuilder(resp.Plan, update)
+	updated := lib.UpdateBuilder(resp.Plan, update)
+	plan := updated.(pb.Plan)
 
-
-	_, err = service.Plan.Update(context.Background(), plan.(*pb.Plan))
+	_, err = service.Plan.Update(context.Background(), &plan)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -97,13 +97,14 @@ func UpdatePlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.
 
 func DeletePlanEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()
-	plan := new(pb.Plan)
-	if err := json.NewDecoder(r.Body).Decode(&plan); err != nil {
+
+	delete := new(pb.Plan)
+	if err := json.NewDecoder(r.Body).Decode(&delete); err != nil {
 		RespondError(w, http.StatusBadRequest, BadRequest, err)
 		return
 	}
 
-	_, err := service.Plan.Create(context.Background(), plan)
+	_, err := service.Plan.Delete(context.Background(), delete)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return

@@ -1,14 +1,15 @@
 package handler
 
 import (
-	"net/http"
+	"cloud.google.com/go/storage"
 	"encoding/json"
-	"golang.org/x/net/context"
-	"github.com/jackson6/gcic-service/service-client/lib"
-	pb "github.com/jackson6/gcic-service/user-service/proto/user"
-	"github.com/jackson6/gcic-service/service-client/client"
 	paymentProto "github.com/jackson6/gcic-service/payment-service/proto/payment"
 	planProto "github.com/jackson6/gcic-service/plan-service/proto/plan"
+	"github.com/jackson6/gcic-service/service-client/client"
+	"github.com/jackson6/gcic-service/service-client/lib"
+	pb "github.com/jackson6/gcic-service/user-service/proto/user"
+	"golang.org/x/net/context"
+	"net/http"
 )
 
 func GetUserEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User){
@@ -64,6 +65,7 @@ func UpdateUserEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, s
 	response := HttpResponse{
 		ResultCode: 200,
 		CodeContent: "Success",
+		Data: newUser,
 	}
 	RespondJSON(w, http.StatusOK, response)
 }
@@ -104,15 +106,30 @@ func RefreshMembershipEndPoint(w http.ResponseWriter, r *http.Request, user *pb.
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func UploadPrifilePicEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client){
+func UploadProfilePicEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client, bucket *storage.BucketHandle, bucketName string){
 
-	user.
-	upade := pb.User{}
-	newUser := lib.UpdateBuilder(user, update)
-
-	_, err := service.User.Update(context.Background(), newUser.(*pb.User))
+	imgUrl, err := lib.UploadFileFromForm(r, bucket, bucketName)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
 	}
+
+	user = &pb.User{Id:"1234"}
+	update := &pb.User{ProfilePic:imgUrl}
+
+	updated := lib.UpdateBuilder(*user, update)
+	newUser := updated.(pb.User)
+
+	_, err = service.User.Update(context.Background(), &newUser)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: newUser,
+	}
+	RespondJSON(w, http.StatusOK, response)
 }

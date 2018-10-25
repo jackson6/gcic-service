@@ -59,9 +59,10 @@ func UpdateBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 		return
 	}
 
-	newUser := lib.UpdateBuilder(resp.Benefit, update)
+	updated := lib.UpdateBuilder(resp.Benefit, update)
+	newBenefit := updated.(pb.Benefit)
 
-	_, err = service.Benefit.Update(context.Background(), newUser.(*pb.Benefit))
+	_, err = service.Benefit.Update(context.Background(), &newBenefit)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return

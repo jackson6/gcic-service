@@ -64,7 +64,7 @@ func (repo *PlanRepository) Get(req *pb.Plan) (*Plan, error) {
 }
 
 func (repo *PlanRepository) Delete(plan *pb.Plan) (error) {
-	err := repo.collection().Remove(plan.Id)
+	err := repo.collection().RemoveId(bson.ObjectIdHex(plan.Id))
 	if err != nil {
 		return err
 	}
@@ -72,7 +72,7 @@ func (repo *PlanRepository) Delete(plan *pb.Plan) (error) {
 }
 
 func (repo *PlanRepository) Update(plan *pb.Plan) (error) {
-	err := repo.collection().Update(plan.Id, &plan)
+	err := repo.collection().UpdateId(bson.ObjectIdHex(plan.Id), &plan)
 	if err != nil {
 		return err
 	}

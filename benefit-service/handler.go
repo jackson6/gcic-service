@@ -3,6 +3,7 @@
 package main
 
 import (
+	"encoding/json"
 	pb "github.com/jackson6/gcic-service/benefit-service/proto/benefit"
 	"golang.org/x/net/context"
 	"gopkg.in/mgo.v2"
@@ -18,6 +19,28 @@ type service struct {
 
 func (s *service) GetRepo() Repository {
 	return &BenefitRepository{s.session.Clone()}
+}
+
+func converter(data interface{}, dataType int) (interface{}, error){
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	if dataType == 0 {
+		benefit := new(pb.Benefit)
+		err = json.Unmarshal(jsonData, &benefit)
+		if err != nil {
+			return nil, err
+		}
+		return benefit, nil
+	} else {
+		benefits := make([]*pb.Benefit, 0)
+		err = json.Unmarshal(jsonData, &benefits)
+		if err != nil {
+			return nil, err
+		}
+		return benefits, nil
+	}
 }
 
 // CreateUser - we created just one method on our service,
@@ -41,11 +64,16 @@ func (s *service) Get(ctx context.Context, req *pb.Benefit, res *pb.Response) er
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	benefit, err := repo.Get(req)
+	data, err := repo.Get(req)
 	if err != nil {
 		return err
 	}
-	res.Benefit = benefit
+
+	benefit, err := converter(data, 0)
+	if err != nil {
+		return err
+	}
+	res.Benefit = benefit.(*pb.Benefit)
 	return nil
 }
 
@@ -53,11 +81,17 @@ func (s *service) All(ctx context.Context,req *pb.Request, res *pb.Response) err
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	benefits, err := repo.All(req)
+	data, err := repo.All(req)
 	if err !=nil {
 		return err
 	}
-	res.Benefits = benefits
+
+	benefits, err := converter(data, 1)
+	if err != nil {
+		return err
+	}
+
+	res.Benefits = benefits.([]*pb.Benefit)
 	return nil
 }
 

@@ -5,6 +5,7 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/partner-service/proto/partner"
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 )
 
 const (
@@ -14,8 +15,8 @@ const (
 
 type Repository interface {
 	Create(*pb.Partner) (*pb.Partner, error)
-	All() ([]*pb.Partner, error)
-	Get(*pb.Partner) (*pb.Partner, error)
+	All() ([]*Partner, error)
+	Get(*pb.Partner) (*Partner, error)
 	Delete(*pb.Partner) error
 	Update(*pb.Partner) error
 	Close()
@@ -23,6 +24,16 @@ type Repository interface {
 
 type PartnerRepository struct {
 	session *mgo.Session
+}
+
+type Partner struct {
+	Id  bson.ObjectId `bson:"_id"json:"id"`
+	Name string `bson:"name"json:"name"`
+	Address string `bson:"address"json:"address"`
+	Parish string `bson:"parish"json:"parish"`
+	Country string `bson:"country"json:"country"`
+	Contact string `bson:"contact"json:"contact"`
+	Img string `bson:"img"json:"img"`
 }
 
 // Create a new user
@@ -35,8 +46,8 @@ func (repo *PartnerRepository) Create(partner *pb.Partner)  (*pb.Partner, error)
 }
 
 // GetAll users
-func (repo *PartnerRepository) All() ([]*pb.Partner, error) {
-	var partners []*pb.Partner
+func (repo *PartnerRepository) All() ([]*Partner, error) {
+	var partners []*Partner
 	// Find normally takes a query, but as we want everything, we can nil this.
 	// We then bind our consignments variable by passing it as an argument to .All().
 	// That sets consignments to the result of the find query.
@@ -45,16 +56,17 @@ func (repo *PartnerRepository) All() ([]*pb.Partner, error) {
 	return partners, err
 }
 
-func (repo *PartnerRepository) Get(partner *pb.Partner) (*pb.Partner, error) {
-	err := repo.collection().FindId(partner.Id).One(&partner)
+func (repo *PartnerRepository) Get(partner *pb.Partner) (*Partner, error) {
+	newPartner := new(Partner)
+	err := repo.collection().FindId(bson.ObjectIdHex(partner.Id)).One(&newPartner)
 	if err != nil {
 		return nil, err
 	}
-	return partner, nil
+	return newPartner, nil
 }
 
 func (repo *PartnerRepository) Delete(partner *pb.Partner) (error) {
-	err := repo.collection().Remove(partner.Id)
+	err := repo.collection().RemoveId(bson.ObjectIdHex(partner.Id))
 	if err != nil {
 		return err
 	}
@@ -62,7 +74,7 @@ func (repo *PartnerRepository) Delete(partner *pb.Partner) (error) {
 }
 
 func (repo *PartnerRepository) Update(partner *pb.Partner) (error) {
-	err := repo.collection().Update(partner.Id, &partner)
+	err := repo.collection().Update(bson.ObjectIdHex(partner.Id), &partner)
 	if err != nil {
 		return err
 	}
