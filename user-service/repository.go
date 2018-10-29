@@ -104,7 +104,7 @@ func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
 	return user, nil
 }
 
-func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
+func (repo *UserRepository) GetByMemberId(email string) (*pb.User, error) {
 	user := &pb.User{}
 	if err := repo.db.Where("member_id = ?", email).
 		First(&user).Error; err != nil {
