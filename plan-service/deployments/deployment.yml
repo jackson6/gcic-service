@@ -1,31 +1,31 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: benefit
+  name: plan
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: benefit
+      app: plan
   template:
     metadata:
       labels:
-        app: benefit
+        app: plan
     spec:
       containers:
-      - name: benefit-service
-        image: eu.gcr.io/gcic-217608/benefit-service:latest
+      - name: plan-service
+        image: eu.gcr.io/gcic-219917/plan-service:latest
         imagePullPolicy: Always
         command: [
-          "./benefit-service",
+          "./plan-service",
           "--selector=static",
           "--server_address=:8080",
         ]
         env:
         - name: DB_HOST
-          value: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330"
+          value: "mongo:27017"
         - name: UPDATED_AT
           value: "Sun 19 Sep 2018 14:38:58 GMT"
         ports:
         - containerPort: 8080
-          name: benefit-port
+          name: plan-port

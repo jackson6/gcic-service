@@ -3,8 +3,8 @@ package handler
 import (
 	"cloud.google.com/go/storage"
 	"encoding/json"
-	"fmt"
 	"github.com/jackson6/gcic-service/service-client/lib"
+	"log"
 	"net/http"
 	"golang.org/x/net/context"
 	pb "github.com/jackson6/gcic-service/partner-service/proto/partner"
@@ -29,7 +29,7 @@ func GetPartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.
 func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client, bucket *storage.BucketHandle, bucketName string) {
 	defer r.Body.Close()
 
-	r.ParseForm()
+	r.ParseMultipartForm(32000 << 20)
 	partner := pb.Partner{
 		Name: r.FormValue("name"),
 		Address: r.FormValue("address"),
@@ -37,6 +37,8 @@ func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 		Country: r.FormValue("country"),
 		Contact: r.FormValue("contact"),
 	}
+
+	log.Println(partner)
 
 	imgUrl, err := lib.UploadFileFromForm(r, bucket, bucketName)
 	if err != nil {
@@ -46,7 +48,7 @@ func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 
 	partner.Img = imgUrl
 
-	resp, err := service.Partner.Create(context.Background(), partner)
+	resp, err := service.Partner.Create(context.Background(), &partner)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return

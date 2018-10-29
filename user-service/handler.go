@@ -54,12 +54,13 @@ func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response)
 
 	if paymentResponse != nil {
 		// Save our user
+		req.User.Id = req.User.UserId
 		err := s.repo.Create(req.User)
 		if err != nil {
 			return err
 		}
 	}
-
+	res.User = req.User
 	// Return matching the `Response` message we created in our
 	// protobuf definition.
 	return nil
@@ -93,6 +94,15 @@ func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error
 
 func (s *service) GetByEmail(ctx context.Context, req *pb.User, res *pb.Response) error {
 	user, err := s.repo.GetByEmail(req.Email)
+	if err != nil {
+		return err
+	}
+	res.User = user
+	return nil
+}
+
+func (s *service) GetByMemberId (ctx context.Context, req *pb.User, res *pb.Response) error {
+	user, err := s.repo.GetByMemberId(req.MemberId)
 	if err != nil {
 		return err
 	}

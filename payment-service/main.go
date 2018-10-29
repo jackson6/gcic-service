@@ -3,6 +3,7 @@ package main
 import (
 	paymentService "github.com/jackson6/gcic-service/payment-service/proto/payment"
 	"github.com/micro/go-micro"
+	k8s "github.com/micro/kubernetes/go/micro"
 	"log"
 )
 
@@ -25,8 +26,8 @@ func main() {
 
 	repo := &PaymentRepository{db}
 
-	srv := micro.NewService(
-		micro.Name("gcic.payment"),
+	srv := k8s.NewService(
+		micro.Name("payment"),
 		micro.Version("latest"),
 	)
 

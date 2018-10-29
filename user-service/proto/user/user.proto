@@ -11,6 +11,7 @@ service UserService {
     rpc ValidateToken(Token) returns (Token) {}
     rpc GetUsers(Id) returns (Response) {}
     rpc GetByEmail(User) returns (Response) {}
+    rpc GetByMemberId(User) returns (Response) {}
 }
 
 message Id {

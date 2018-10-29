@@ -18,8 +18,8 @@ func CreateSession() (*gorm.DB, error) {
 	return gorm.Open(
 		"postgres",
 		fmt.Sprintf(
-			"host=%s user=%s dbname=%s sslmode=disable password=%s",
-			host, user, DBName, password,
+			"postgres://%s:%s@%s/%s?sslmode=disable",
+			user, password, host, DBName,
 		),
 	)
 }

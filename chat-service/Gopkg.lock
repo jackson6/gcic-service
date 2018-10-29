@@ -13,9 +13,15 @@
   version = "v0.1.0"
 
 [[projects]]
-  digest = "1:97df918963298c287643883209a2c3f642e6593379f97ab400c2a2e219ab647d"
+  digest = "1:4c0989ca0bcd10799064318923b9bc2db6b4d6338dd75f3f2d86c3511aaaf5cf"
   name = "github.com/golang/protobuf"
-  packages = ["proto"]
+  packages = [
+    "proto",
+    "ptypes",
+    "ptypes/any",
+    "ptypes/duration",
+    "ptypes/timestamp",
+  ]
   pruneopts = "UT"
   revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
   version = "v1.2.0"
@@ -72,6 +78,14 @@
   version = "v0.8.1"
 
 [[projects]]
+  digest = "1:3e551bbb3a7c0ab2a2bf4660e7fcad16db089fdcfbb44b0199e62838038623ea"
+  name = "github.com/json-iterator/go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "1624edc4454b8682399def8740d46db5e4362ba4"
+  version = "v1.1.5"
+
+[[projects]]
   branch = "master"
   digest = "1:0d3455926b7b805da0ba04fe325ad7662f47c0b6522500a2d787667e2fb6e463"
   name = "github.com/micro/cli"
@@ -119,6 +133,22 @@
   version = "v0.11.0"
 
 [[projects]]
+  digest = "1:92286a6b1477199f6cfda84cbc649982f948300a9d6aa0ee7632da26e9c33b74"
+  name = "github.com/micro/go-plugins"
+  packages = [
+    "client/grpc",
+    "registry/kubernetes",
+    "registry/kubernetes/client",
+    "registry/kubernetes/client/api",
+    "registry/kubernetes/client/watch",
+    "selector/static",
+    "server/grpc",
+  ]
+  pruneopts = "UT"
+  revision = "7945a6b064ad6c8f016c9b38c234e437d72d8c6a"
+  version = "v0.14.1"
+
+[[projects]]
   branch = "master"
   digest = "1:7243b71c52f5226ed26340e9bbffd702484c152caa2e78234f4384a8309dcafb"
   name = "github.com/micro/go-rcache"
@@ -136,6 +166,48 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:1031bd6e4f49a411c865e30590cd093b1e0493405eebf2d1d4388ee2a847ea15"
+  name = "github.com/micro/grpc-go"
+  packages = [
+    ".",
+    "balancer",
+    "balancer/base",
+    "balancer/roundrobin",
+    "codes",
+    "connectivity",
+    "credentials",
+    "encoding",
+    "encoding/proto",
+    "internal",
+    "internal/backoff",
+    "internal/channelz",
+    "internal/envconfig",
+    "internal/grpcrand",
+    "keepalive",
+    "logger",
+    "metadata",
+    "naming",
+    "peer",
+    "resolver",
+    "resolver/dns",
+    "resolver/passthrough",
+    "stats",
+    "status",
+    "transport",
+  ]
+  pruneopts = "UT"
+  revision = "2c703400301b46ab89350e7539834de03073527e"
+
+[[projects]]
+  branch = "master"
+  digest = "1:f065cd4a5e4e5b0ad60138191e26733f2d715f6594bc253e39d9635b8e8ed0ce"
+  name = "github.com/micro/kubernetes"
+  packages = ["go/web"]
+  pruneopts = "UT"
+  revision = "e865750aa3bc75ae581e006535571b4c21373b90"
+
+[[projects]]
+  branch = "master"
   digest = "1:0fd6feac155e496abc6fcc734dded208deef8c9010bad8919adc393e699886ce"
   name = "github.com/micro/mdns"
   packages = ["."]
@@ -144,10 +216,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:186721155e7aef08313eec7b1e9d74ccbe9f21a314a3167dbdb7cccd8978dce6"
+  digest = "1:dd7e202af29051df696adb1c50f1977036a6e044e7616263a3eab4d4004d9988"
   name = "github.com/micro/util"
   packages = [
     "go/lib/addr",
+    "go/lib/grpc",
     "go/lib/http",
     "go/lib/net",
     "go/lib/tls",
@@ -188,6 +261,22 @@
   version = "v1.1.2"
 
 [[projects]]
+  digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
+  name = "github.com/modern-go/concurrent"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94"
+  version = "1.0.3"
+
+[[projects]]
+  digest = "1:e32bdbdb7c377a07a9a46378290059822efdce5c8d96fe71940d87cb4f918855"
+  name = "github.com/modern-go/reflect2"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
+  version = "1.0.1"
+
+[[projects]]
   digest = "1:e5d0bd87abc2781d14e274807a470acd180f0499f8bf5bb18606e9ec22ad9de9"
   name = "github.com/pborman/uuid"
   packages = ["."]
@@ -216,15 +305,21 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:5a83591bcb11501a55db71952158d217ad7440826eeca278e3c5d83de973091b"
+  digest = "1:4ab551743538ce88c540073958b2fb653ca077c5d4c3d1991d86016dd38e22f6"
   name = "golang.org/x/net"
   packages = [
     "bpf",
     "context",
+    "http/httpguts",
+    "http2",
+    "http2/hpack",
+    "idna",
     "internal/iana",
     "internal/socket",
+    "internal/timeseries",
     "ipv4",
     "ipv6",
+    "trace",
   ]
   pruneopts = "UT"
   revision = "146acd28ed5894421fb5aac80ca93bc1b1f46f87"
@@ -236,6 +331,37 @@
   packages = ["unix"]
   pruneopts = "UT"
   revision = "4497e2df6f9e69048a54498c7affbbec3294ad47"
+
+[[projects]]
+  digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
+  name = "golang.org/x/text"
+  packages = [
+    "collate",
+    "collate/build",
+    "internal/colltab",
+    "internal/gen",
+    "internal/tag",
+    "internal/triegen",
+    "internal/ucd",
+    "language",
+    "secure/bidirule",
+    "transform",
+    "unicode/bidi",
+    "unicode/cldr",
+    "unicode/norm",
+    "unicode/rangetable",
+  ]
+  pruneopts = "UT"
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:56b0bca90b7e5d1facf5fbdacba23e4e0ce069d25381b8e2f70ef1e7ebfb9c1a"
+  name = "google.golang.org/genproto"
+  packages = ["googleapis/rpc/status"]
+  pruneopts = "UT"
+  revision = "8b5d7a19e2d98fbad9aaf9c599776bf066d7c70f"
 
 [[projects]]
   branch = "v2"
@@ -260,6 +386,7 @@
     "github.com/micro/go-micro/client",
     "github.com/micro/go-micro/server",
     "github.com/micro/go-web",
+    "github.com/micro/kubernetes/go/web",
     "golang.org/x/net/context",
     "gopkg.in/mgo.v2",
     "gopkg.in/mgo.v2/bson",

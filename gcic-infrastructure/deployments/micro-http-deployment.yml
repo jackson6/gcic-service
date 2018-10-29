@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-http
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: micro-http
+  template:
+    metadata:
+      labels:
+        app: micro-http
+    spec:
+      containers:
+      - name: micro-http
+        image: microhq/micro:kubernetes
+        args:
+        - "api"
+        - "--handler=http"
+        env:
+        - name: MICRO_API_ADDRESS
+          value: ":80"
+        ports:
+        - containerPort: 80
+          name: http-port

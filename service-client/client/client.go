@@ -23,12 +23,12 @@ type Client struct {
 }
 
 func (c *Client) NewClient() *Client {
-	c.User = userService.NewUserServiceClient("gcic.user", microclient.DefaultClient)
-	c.Email = emailService.NewEmailServiceClient("gcic.email", microclient.DefaultClient)
-	c.Partner = partnerService.NewPartnerServiceClient("gcic.partner", microclient.DefaultClient)
-	c.Payment = paymentService.NewPaymentServiceClient("gcic.payment", microclient.DefaultClient)
-	c.Plan = planService.NewPlanServiceClient("gcic.plan", microclient.DefaultClient)
-	c.Benefit = benefitService.NewBenefitServiceClient("gcic.benefit", microclient.DefaultClient)
-	c.Loyalty = loyaltyService.NewLoyaltyServiceClient("gcic.loyalty", microclient.DefaultClient)
+	c.User = userService.NewUserServiceClient("user", microclient.DefaultClient)
+	c.Email = emailService.NewEmailServiceClient("email", microclient.DefaultClient)
+	c.Partner = partnerService.NewPartnerServiceClient("partner", microclient.DefaultClient)
+	c.Payment = paymentService.NewPaymentServiceClient("payment", microclient.DefaultClient)
+	c.Plan = planService.NewPlanServiceClient("plan", microclient.DefaultClient)
+	c.Benefit = benefitService.NewBenefitServiceClient("benefit", microclient.DefaultClient)
+	c.Loyalty = loyaltyService.NewLoyaltyServiceClient("loyalty", microclient.DefaultClient)
 	return c
 }

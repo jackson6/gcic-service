@@ -3,6 +3,7 @@ package main
 
 import (
 	"github.com/micro/go-web"
+	k8s "github.com/micro/kubernetes/go/web"
 	"log"
 	"os"
 )
@@ -36,8 +37,8 @@ func main() {
 
 	repo := &ChatRepository{session}
 
-	srv := web.NewService(
-		web.Name("gcic.chat"),
+	srv := k8s.NewService(
+		web.Name("chat"),
 		web.Version("latest"),
 	)
 

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: chat-service
-        image: eu.gcr.io/gcic-217608/chat-service:latest
+        image: eu.gcr.io/gcic-219917/chat-service:latest
         imagePullPolicy: Always
         command: [
           "./chat-service",
@@ -23,7 +23,11 @@ spec:
         ]
         env:
         - name: DB_HOST
-          value: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330"
+          value: "mongo:27017"
+        - name: MICRO_REGISTRY
+          value: "kubernetes"
+        - name: MICRO_SELECTOR
+          value: "static"
         - name: UPDATED_AT
           value: "Sun 19 Sep 2018 14:38:58 GMT"
         ports:

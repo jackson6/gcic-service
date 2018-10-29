@@ -20,9 +20,15 @@
   version = "v0.1.0"
 
 [[projects]]
-  digest = "1:97df918963298c287643883209a2c3f642e6593379f97ab400c2a2e219ab647d"
+  digest = "1:4c0989ca0bcd10799064318923b9bc2db6b4d6338dd75f3f2d86c3511aaaf5cf"
   name = "github.com/golang/protobuf"
-  packages = ["proto"]
+  packages = [
+    "proto",
+    "ptypes",
+    "ptypes/any",
+    "ptypes/duration",
+    "ptypes/timestamp",
+  ]
   pruneopts = "UT"
   revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
   version = "v1.2.0"
@@ -69,12 +75,28 @@
   revision = "19bbd39e421bdf3559d5025fb2c760f5ffa56233"
 
 [[projects]]
+  digest = "1:3e551bbb3a7c0ab2a2bf4660e7fcad16db089fdcfbb44b0199e62838038623ea"
+  name = "github.com/json-iterator/go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "1624edc4454b8682399def8740d46db5e4362ba4"
+  version = "v1.1.5"
+
+[[projects]]
   branch = "master"
   digest = "1:0d3455926b7b805da0ba04fe325ad7662f47c0b6522500a2d787667e2fb6e463"
   name = "github.com/micro/cli"
   packages = ["."]
   pruneopts = "UT"
   revision = "8b9d33ec2f19cfe2fe9f448f18b033c004c18fd2"
+
+[[projects]]
+  digest = "1:7984d4f0cdaf14595e27a91315ee2b8ac12f1ac53e3e2ee53ca90e1ddb4da7f1"
+  name = "github.com/micro/go-grpc"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "52024085c07e420ed8795c95006255a75feb500e"
+  version = "v0.3.0"
 
 [[projects]]
   branch = "master"
@@ -117,9 +139,19 @@
   version = "v0.11.0"
 
 [[projects]]
-  digest = "1:a7826a88e38d5d9e8e8dcd820ae1fe4932f04342f68013b838698ffa26545901"
+  digest = "1:ef2f966153b43cf00d889d4d20ecf28ae48f61eb5ed316bd8341a38e6239ce7a"
   name = "github.com/micro/go-plugins"
-  packages = ["broker/nats"]
+  packages = [
+    "broker/nats",
+    "client/grpc",
+    "registry/kubernetes",
+    "registry/kubernetes/client",
+    "registry/kubernetes/client/api",
+    "registry/kubernetes/client/watch",
+    "selector/cache",
+    "selector/static",
+    "server/grpc",
+  ]
   pruneopts = "UT"
   revision = "c816653a69ab521af8326f5e6e2596915f5772f6"
   version = "v0.14.0"
@@ -134,6 +166,48 @@
 
 [[projects]]
   branch = "master"
+  digest = "1:1031bd6e4f49a411c865e30590cd093b1e0493405eebf2d1d4388ee2a847ea15"
+  name = "github.com/micro/grpc-go"
+  packages = [
+    ".",
+    "balancer",
+    "balancer/base",
+    "balancer/roundrobin",
+    "codes",
+    "connectivity",
+    "credentials",
+    "encoding",
+    "encoding/proto",
+    "internal",
+    "internal/backoff",
+    "internal/channelz",
+    "internal/envconfig",
+    "internal/grpcrand",
+    "keepalive",
+    "logger",
+    "metadata",
+    "naming",
+    "peer",
+    "resolver",
+    "resolver/dns",
+    "resolver/passthrough",
+    "stats",
+    "status",
+    "transport",
+  ]
+  pruneopts = "UT"
+  revision = "2c703400301b46ab89350e7539834de03073527e"
+
+[[projects]]
+  digest = "1:f4e23216c844a5d78d54a792e82aa46a1904357b0f3aa5c44cc2c667316087b3"
+  name = "github.com/micro/kubernetes"
+  packages = ["go/micro"]
+  pruneopts = "UT"
+  revision = "1b3cb85ccc7a367049117e263edc1a26a98b20b5"
+  version = "v0.1.0"
+
+[[projects]]
+  branch = "master"
   digest = "1:0fd6feac155e496abc6fcc734dded208deef8c9010bad8919adc393e699886ce"
   name = "github.com/micro/mdns"
   packages = ["."]
@@ -142,10 +216,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:366b59150c83c1b7c33818cb7b79123920d543d78bd23d80121a621776255139"
+  digest = "1:65c7e1d0a7eb2d2062a69041059a31e65c0009f3c6cd3883d66532110025c7a3"
   name = "github.com/micro/util"
   packages = [
     "go/lib/addr",
+    "go/lib/grpc",
     "go/lib/net",
     "go/lib/tls",
   ]
@@ -182,6 +257,22 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
+
+[[projects]]
+  digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
+  name = "github.com/modern-go/concurrent"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94"
+  version = "1.0.3"
+
+[[projects]]
+  digest = "1:e32bdbdb7c377a07a9a46378290059822efdce5c8d96fe71940d87cb4f918855"
+  name = "github.com/modern-go/reflect2"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4b7aa43c6742a2c18fdef89dd197aaae7dac7ccd"
+  version = "1.0.1"
 
 [[projects]]
   digest = "1:4ce94f3d2074662c04677db471456feb56078244ebcfe3789e6e95901c085bc5"
@@ -232,15 +323,21 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:5a83591bcb11501a55db71952158d217ad7440826eeca278e3c5d83de973091b"
+  digest = "1:4ab551743538ce88c540073958b2fb653ca077c5d4c3d1991d86016dd38e22f6"
   name = "golang.org/x/net"
   packages = [
     "bpf",
     "context",
+    "http/httpguts",
+    "http2",
+    "http2/hpack",
+    "idna",
     "internal/iana",
     "internal/socket",
+    "internal/timeseries",
     "ipv4",
     "ipv6",
+    "trace",
   ]
   pruneopts = "UT"
   revision = "4dfa2610cdf3b287375bbba5b8f2a14d3b01d8de"
@@ -253,16 +350,47 @@
   pruneopts = "UT"
   revision = "e4b3c5e9061176387e7cea65e4dc5853801f3fb7"
 
+[[projects]]
+  digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
+  name = "golang.org/x/text"
+  packages = [
+    "collate",
+    "collate/build",
+    "internal/colltab",
+    "internal/gen",
+    "internal/tag",
+    "internal/triegen",
+    "internal/ucd",
+    "language",
+    "secure/bidirule",
+    "transform",
+    "unicode/bidi",
+    "unicode/cldr",
+    "unicode/norm",
+    "unicode/rangetable",
+  ]
+  pruneopts = "UT"
+  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
+  version = "v0.3.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:56b0bca90b7e5d1facf5fbdacba23e4e0ce069d25381b8e2f70ef1e7ebfb9c1a"
+  name = "google.golang.org/genproto"
+  packages = ["googleapis/rpc/status"]
+  pruneopts = "UT"
+  revision = "8b5d7a19e2d98fbad9aaf9c599776bf066d7c70f"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/golang/protobuf/proto",
-    "github.com/micro/go-micro",
     "github.com/micro/go-micro/broker",
     "github.com/micro/go-micro/client",
     "github.com/micro/go-micro/server",
     "github.com/micro/go-plugins/broker/nats",
+    "github.com/micro/kubernetes/go/micro",
     "golang.org/x/net/context",
   ]
   solver-name = "gps-cdcl"

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: user-service
-        image: eu.gcr.io/gcic-217608/email-service:latest
+        image: eu.gcr.io/gcic-219917/email-service:latest
         imagePullPolicy: Always
         command: [
           "./email-service",
@@ -22,8 +22,14 @@ spec:
           "--server_address=:8080",
         ]
         env:
-        - name: DB_HOST
-          value: "mongo:27017"
+        - name: SMPT_HOST
+          value: "smtp.gmail.com"
+        - name: SMTP_PORT
+          value: "465"
+        - name: SMTP_ADDR
+          value: "odanejackson12@gmail.com"
+        - name: SMTP_PASS
+          value: "madhead1"
         - name: UPDATED_AT
           value: "Sun 19 Sep 2018 14:38:58 GMT"
         ports:

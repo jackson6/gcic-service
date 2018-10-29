@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: user-service
-        image: eu.gcr.io/gcic-217608/user-service:latest
+        image: eu.gcr.io/gcic-219917/user-service:latest
         imagePullPolicy: Always
         command: [
           "./user-service",
@@ -23,7 +23,13 @@ spec:
         ]
         env:
         - name: DB_HOST
-          value: "mongodb://gcic:dreamer6@ds163330.mlab.com:63330"
+          value: "postgres:5432"
+        - name: DB_NAME
+          value: "gcic"
+        - name: DB_PASS
+          value: ""
+        - name: DB_USER
+          value: "postgres"
         - name: UPDATED_AT
           value: "Sun 19 Sep 2018 14:38:58 GMT"
         ports:

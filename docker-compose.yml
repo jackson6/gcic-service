@@ -25,11 +25,11 @@ services:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
       STRIPE_KEY: "sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
-      DB_NAME: "postgres"
+      DB_NAME: "gcic"
       DB_HOST: "127.0.0.1"
       DB_PORT: "5432"
       DB_USER: "postgres"
-      DB_PASSWORD: ""
+      DB_PASSWORD: "dreamer6"
       DISABLE_AUTH: "true"
 
   user-service:
@@ -40,11 +40,11 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_NAME: "postgres"
+      DB_NAME: "gcic"
       DB_HOST: "127.0.0.1"
       DB_PORT: "5432"
       DB_USER: "postgres"
-      DB_PASSWORD: ""
+      DB_PASSWORD: "dreamer6"
       DISABLE_AUTH: "true"
 
   plan-service:
@@ -77,7 +77,7 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "127.0.0.1:27017"
+      DB_HOST: "10.27.242.89:32463"
       DISABLE_AUTH: "true"
 
   chat-service:
@@ -105,9 +105,10 @@ services:
   service-cli:
     build: ./service-client
     ports:
-    - 3000:3000
+    - 50059:50051
     network_mode: "host"
     environment:
+      MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
 
   database:

@@ -1,23 +1,23 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: partner
+  name: client-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: partner
+      app: client-api
   template:
     metadata:
       labels:
-        app: partner
+        app: client-api
     spec:
       containers:
-      - name: partner-service
-        image: eu.gcr.io/gcic-219917/partner-service:latest
+      - name: service-client
+        image: eu.gcr.io/gcic-219917/service-client:latest
         imagePullPolicy: Always
         command: [
-          "./partner-service",
+          "./service-client",
           "--selector=static",
           "--server_address=:8080",
         ]
@@ -28,4 +28,4 @@ spec:
           value: "Sun 19 Sep 2018 14:38:58 GMT"
         ports:
         - containerPort: 8080
-          name: partner-port
+          name: client-port

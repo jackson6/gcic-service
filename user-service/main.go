@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"github.com/micro/go-micro"
+	k8s "github.com/micro/kubernetes/go/micro"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/server"
@@ -48,14 +49,14 @@ func main() {
 	}
 
 	// Create a new service. Optionally include some options here.
-	srv := micro.NewService(
+	srv := k8s.NewService(
 
 		// This name must match the package name given in your protobuf definition
-		micro.Name("gcic.user"),
+		micro.Name("user"),
 		micro.Version("latest"),
 	)
 
-	paymentClient := paymentService.NewPaymentServiceClient("gcic.payment", srv.Client())
+	paymentClient := paymentService.NewPaymentServiceClient("payment", srv.Client())
 
 	// Init will parse the command line flags.
 	srv.Init()

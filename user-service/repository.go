@@ -15,6 +15,7 @@ type Repository interface {
 	All() ([]*pb.User, error)
 	Get(string) (*pb.User, error)
 	GetByEmail(string) (*pb.User, error)
+	GetByMemberId(string) (*pb.User, error)
 	GetUsers([]string) ([]*pb.User, error)
 }
 
@@ -97,6 +98,15 @@ func (repo *UserRepository) GetUsers(id []string) ([]*pb.User, error) {
 func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
 	user := &pb.User{}
 	if err := repo.db.Where("email = ?", email).
+		First(&user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
+	user := &pb.User{}
+	if err := repo.db.Where("member_id = ?", email).
 		First(&user).Error; err != nil {
 		return nil, err
 	}

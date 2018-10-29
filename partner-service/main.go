@@ -3,6 +3,7 @@ package main
 
 import (
 	"github.com/micro/go-micro"
+	k8s "github.com/micro/kubernetes/go/micro"
 	"log"
 	"os"
 
@@ -38,10 +39,10 @@ func main() {
 	}
 
 	// Create a new service. Optionally include some options here.
-	srv := micro.NewService(
+	srv := k8s.NewService(
 
 		// This name must match the package name given in your protobuf definition
-		micro.Name("gcic.partner"),
+		micro.Name("partner"),
 		micro.Version("latest"),
 	)
 

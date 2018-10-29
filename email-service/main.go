@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	emailService "github.com/jackson6/gcic-service/email-service/proto/email"
 	"github.com/micro/go-micro"
+	k8s "github.com/micro/kubernetes/go/micro"
 	"github.com/micro/go-micro/broker"
 	"github.com/micro/go-micro/client"
 	_ "github.com/micro/go-plugins/broker/nats"
@@ -34,8 +35,8 @@ func main() {
 
 	smtpServer := SmtpServer{host:host, port:port, password:password, addr:addr}
 
-	srv := micro.NewService(
-		micro.Name("gcic.email"),
+	srv := k8s.NewService(
+		micro.Name("email"),
 		micro.Version("latest"),
 	)
 
