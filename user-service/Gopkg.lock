@@ -124,7 +124,7 @@
   name = "github.com/jackson6/gcic-service"
   packages = ["payment-service/proto/payment"]
   pruneopts = "UT"
-  revision = "1ce57f6687d859391926d5bfb8e4443fe484fe88"
+  revision = "72fb0df783a9814376b8075abca400de2129f576"
 
 [[projects]]
   digest = "1:6895fbe5a10c5aebd1965cac6f6905dcdb21bee01e08912d3ba6a805c2485f6a"

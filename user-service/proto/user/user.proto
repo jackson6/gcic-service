@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package user;
 
-import "google/protobuf/timestamp.proto";
-
 service UserService {
     rpc Create(Request) returns (Response) {}
     rpc Update(User) returns (Response) {}
@@ -39,12 +37,12 @@ message User {
     string country = 16;
     string question = 17;
     string answer = 18;
-    google.protobuf.Timestamp dob = 19;
+    int64 dob = 19;
     string gender = 20;
     string stripe_id = 21;
     string plan_id = 22;
     string referral_code = 23;
-    google.protobuf.Timestamp membership_exp = 24;
+    int64 membership_exp = 24;
     string profile_pic = 25;
 }
 

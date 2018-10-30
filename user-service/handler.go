@@ -7,6 +7,7 @@ import (
 	"firebase.google.com/go"
 	paymentProto "github.com/jackson6/gcic-service/payment-service/proto/payment"
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/micro/go-micro/broker"
 	"golang.org/x/net/context"
 	"log"
@@ -63,7 +64,7 @@ func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response)
 	date := time.Now()
 	expDate := date.AddDate(0, 1, 0)
 
-	req.User.Dob = expDate
+	req.User.MembershipExp = expDate.Unix()
 
 	if paymentResponse != nil {
 		// Save our user
