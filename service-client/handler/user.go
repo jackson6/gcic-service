@@ -3,6 +3,7 @@ package handler
 import (
 	"cloud.google.com/go/storage"
 	"encoding/json"
+	"github.com/gorilla/mux"
 	paymentProto "github.com/jackson6/gcic-service/payment-service/proto/payment"
 	planProto "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	"github.com/jackson6/gcic-service/service-client/client"
@@ -14,6 +15,30 @@ import (
 
 func GetUserEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User){
 	defer r.Body.Close()
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: user,
+	}
+	RespondJSON(w, http.StatusOK, response)
+}
+
+func GetUserEmailEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client){
+	defer r.Body.Close()
+	
+	params := mux.Vars(r)
+	id := params["id"]
+
+	user := new(pb.User)
+
+	req := pb.User{MemberId: id}
+	resp, err := service.User.GetByMemberId(context.Background(), &req)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+
+	user.Email = resp.User.Email
 	response := HttpResponse{
 		ResultCode: 200,
 		CodeContent: "Success",

@@ -10,6 +10,9 @@ import (
 	"github.com/micro/go-micro/broker"
 	"golang.org/x/net/context"
 	"log"
+	"math/rand"
+	"strconv"
+	"time"
 )
 
 const topic = "user.created"
@@ -51,6 +54,16 @@ func (s *service) Create(ctx context.Context, req *pb.Request, res *pb.Response)
 	if err != nil {
 		return err
 	}
+
+	req.User.MemberId, err = s.GenerateId()
+	if err != nil {
+		return err
+	}
+
+	date := time.Now()
+	expDate := date.AddDate(0, 1, 0)
+
+	req.User.Dob = expDate
 
 	if paymentResponse != nil {
 		// Save our user
@@ -164,4 +177,26 @@ func (s *service) publishEvent(user *pb.User) error {
 	}
 
 	return nil
+}
+
+func (s *service) GenerateId() (string, error) {
+	var memberId string
+	var err error
+	var user *pb.User
+
+	for {
+		memberId = strconv.Itoa(rangeIn(1, 10))
+		user, err = s.repo.GetByMemberId(memberId)
+		if err != nil || user == nil {
+			break
+		}
+	}
+	if err != nil  {
+		return "", err
+	}
+	return memberId, nil
+}
+
+func rangeIn(low, hi int) int {
+	return low + rand.Intn(hi-low)
 }
