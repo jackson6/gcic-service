@@ -29,7 +29,7 @@ func (repo *PaymentRepository) CreateTransaction(transaction *pb.Transaction) er
 }
 
 // Get user transactions
-func (repo *PaymentRepository) GetTransaction(transaction *pb.Transaction) ([]*pb.Transaction, error) {
+func (repo *PaymentRepository) GetHistory(transaction *pb.Transaction) ([]*pb.Transaction, error) {
 	var transactions []*pb.Transaction
 	if err := repo.db.Where("id = ?", transaction.UserId).Find(&transactions).Error; err != nil {
 		return nil, err
