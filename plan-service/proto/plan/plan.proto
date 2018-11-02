@@ -16,6 +16,12 @@ message Plan {
     string name = 3;
     string description = 4;
     repeated string includes = 5;
+    repeated Level levels = 6;
+}
+
+message Level {
+    int32 level = 1;
+    string description = 2;
 }
 
 message Request {}

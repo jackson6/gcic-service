@@ -32,6 +32,7 @@ type Plan struct {
 	Description string `bson:"description"json:"description"`
 	Name string `bson:"name"json:"name"`
 	Includes []string `bson:"includes"json:"includes"`
+	Levels []*pb.Level `bson:"levels"json:"levels"`
 }
 
 // Create a new user

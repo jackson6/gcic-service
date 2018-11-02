@@ -163,7 +163,7 @@ func PaymentHistoryEndPoint(w http.ResponseWriter, r *http.Request, user *pb.Use
 	defer r.Body.Close()
 
 	req := paymentProto.Transaction{UserId: user.Id}
-	resp, err := service.Payment.Hisory(context.Background(), &req)
+	resp, err := service.Payment.History(context.Background(), &req)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
