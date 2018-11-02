@@ -11,20 +11,30 @@ import (
 )
 
 type Repository interface {
-	CreateCharge(charge *pb.Charge) (*stripe.Charge, error)
-	CreateCustomer(charge *pb.Customer) (*stripe.Customer, error)
+	CreateCharge(*pb.Charge) (*stripe.Charge, error)
+	CreateCustomer(*pb.Customer) (*stripe.Customer, error)
+	GetHistory(*pb.Transaction) ([]*pb.Transaction, error)
 }
 
 type PaymentRepository struct {
 	db *gorm.DB
 }
 
-// Create a new user
+// Create a new transaction
 func (repo *PaymentRepository) CreateTransaction(transaction *pb.Transaction) error {
 	if err := repo.db.Create(transaction).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+// Get user transactions
+func (repo *PaymentRepository) GetTransaction(transaction *pb.Transaction) ([]*pb.Transaction, error) {
+	var transactions []*pb.Transaction
+	if err := repo.db.Where("id = ?", transaction.UserId).Find(&transactions).Error; err != nil {
+		return nil, err
+	}
+	return transactions, nil
 }
 
 func (repo *PaymentRepository) CreateCharge(charge *pb.Charge) (*stripe.Charge, error) {

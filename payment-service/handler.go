@@ -14,7 +14,7 @@ type service struct {
 	repo Repository
 }
 
-func (s *service) CreateCharge(ctx context.Context, req *pb.Charge, res *pb.Charge) error {
+func (s *service) CreateCharge(ctx context.Context, req *pb.Charge, res *pb.Response) error {
 	log.Println(req)
 
 	// Save our user
@@ -23,21 +23,35 @@ func (s *service) CreateCharge(ctx context.Context, req *pb.Charge, res *pb.Char
 		return err
 	}
 
-	res.Id = charge.ID
+	res.Charge.Id = charge.ID
 
 	// Return matching the `Response` message we created in our
 	// protobuf definition.
 	return nil
 }
 
-func (s *service) CreateCustomer(ctx context.Context, req *pb.Customer, res *pb.Customer) error {
+func (s *service) CreateCustomer(ctx context.Context, req *pb.Customer, res *pb.Response) error {
 	// Save our user
 	customer, err := s.repo.CreateCustomer(req)
 	if err != nil {
 		return err
 	}
 
-	res.Id = customer.ID
+	res.Customer.Id = customer.ID
+	// Return matching the `Response` message we created in our
+	// protobuf definition.
+	return nil
+}
+
+
+func (s *service) History(ctx context.Context, req *pb.Transaction, res *pb.Response) error {
+	// Save our userCustomer
+	transactions, err := s.repo.GetHistory(req)
+	if err != nil {
+		return err
+	}
+
+	res.Transactions = transactions
 	// Return matching the `Response` message we created in our
 	// protobuf definition.
 	return nil

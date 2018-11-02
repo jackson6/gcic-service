@@ -39,6 +39,14 @@
   version = "v3.4.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:b01baf06b06307477bce22531bb77ac36165113067db11825ad4787405a395c4"
+  name = "github.com/captaincodeman/couponcode"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "fdb16cdc1189a49a1fd2cd83aa15cd25b7b8cf79"
+
+[[projects]]
   digest = "1:4be5d1a52c61b74c0a4d62f37c0640f706ae6e07eb73617dd013990d565717d5"
   name = "github.com/go-log/log"
   packages = [
@@ -124,7 +132,7 @@
   name = "github.com/jackson6/gcic-service"
   packages = ["payment-service/proto/payment"]
   pruneopts = "UT"
-  revision = "72fb0df783a9814376b8075abca400de2129f576"
+  revision = "6806f3d2fb1aafd30088372e821b25426d12bc3f"
 
 [[projects]]
   digest = "1:6895fbe5a10c5aebd1965cac6f6905dcdb21bee01e08912d3ba6a805c2485f6a"
@@ -582,8 +590,8 @@
   analyzer-version = 1
   input-imports = [
     "firebase.google.com/go",
+    "github.com/captaincodeman/couponcode",
     "github.com/golang/protobuf/proto",
-    "github.com/golang/protobuf/ptypes/timestamp",
     "github.com/jackson6/gcic-service/payment-service/proto/payment",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",

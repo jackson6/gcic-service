@@ -59,7 +59,6 @@ func (repo *UserRepository) All() ([]*pb.User, error) {
 func (repo *UserRepository) Get(id string) (*pb.User, error) {
 	var user pb.User
 	user.Id = id
-	log.Println(user)
 	if err := repo.db.First(&user).Error; err != nil {
 		return nil, err
 	}

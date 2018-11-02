@@ -386,6 +386,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/golang/protobuf/proto",
+    "github.com/micro/go-micro",
     "github.com/micro/go-micro/broker",
     "github.com/micro/go-micro/client",
     "github.com/micro/go-micro/server",

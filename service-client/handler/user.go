@@ -158,3 +158,20 @@ func UploadProfilePicEndPoint(w http.ResponseWriter, r *http.Request, user *pb.U
 	}
 	RespondJSON(w, http.StatusOK, response)
 }
+
+func PaymentHistoryEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client){
+	defer r.Body.Close()
+
+	req := paymentProto.Transaction{UserId: user.Id}
+	resp, err := service.Payment.Hisory(context.Background(), &req)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: resp.Transactions,
+	}
+	RespondJSON(w, http.StatusOK, response)
+}
