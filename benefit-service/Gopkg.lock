@@ -75,6 +75,14 @@
   revision = "19bbd39e421bdf3559d5025fb2c760f5ffa56233"
 
 [[projects]]
+  branch = "master"
+  digest = "1:efd25130ba8c802ee88b7926d8c0e14084612ca13a3fcfa81caabf2a64ccd7d9"
+  name = "github.com/jackson6/gcic-service"
+  packages = ["partner-service/proto/partner"]
+  pruneopts = "UT"
+  revision = "e1450c96c8806c6cf3aefb61eb282f4ab157270c"
+
+[[projects]]
   digest = "1:3e551bbb3a7c0ab2a2bf4660e7fcad16db089fdcfbb44b0199e62838038623ea"
   name = "github.com/json-iterator/go"
   packages = ["."]
@@ -379,6 +387,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/golang/protobuf/proto",
+    "github.com/jackson6/gcic-service/partner-service/proto/partner",
     "github.com/micro/go-micro",
     "github.com/micro/go-micro/client",
     "github.com/micro/go-micro/server",

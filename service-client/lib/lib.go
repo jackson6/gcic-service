@@ -11,6 +11,8 @@ import (
 	"reflect"
 )
 
+const publicURL = "https://storage.googleapis.com/%s/%s"
+
 func UpdateBuilder(old, new interface{}) interface{} {
 	oldVal := reflect.ValueOf(old).Elem()
 	newVal := reflect.ValueOf(new).Elem()
@@ -56,6 +58,42 @@ func UploadFileFromForm(r *http.Request, bucket *storage.BucketHandle, bucketNam
 		return "", err
 	}
 
-	const publicURL = "https://storage.googleapis.com/%s/%s"
 	return fmt.Sprintf(publicURL, bucketName, name), nil
+}
+
+func UploadMultipleFileFromForm(r *http.Request, bucket *storage.BucketHandle, bucketName string) (url []string, err error) {
+	var urls []string
+
+	m := r.MultipartForm
+
+	files := m.File["files"]
+	for i, _ := range files {
+
+		name := uuid.NewV4().String() + path.Ext(files[i].Filename)
+
+		ctx := context.Background()
+		w := bucket.Object(name).NewWriter(ctx)
+
+		// Warning: storage.AllUsers gives public read access to anyone.
+		w.ACL = []storage.ACLRule{{Entity: storage.AllUsers, Role: storage.RoleReader}}
+		w.ContentType = files[i].Header.Get("Content-Type")
+
+		// Entries are immutable, be aggressive about caching (1 day).
+		w.CacheControl = "public, max-age=86400"
+
+		file, err := files[i].Open()
+		defer file.Close()
+		if err != nil {
+			return urls, err
+		}
+
+		if _, err := io.Copy(w, file); err != nil {
+			return urls, err
+		}
+		if err := w.Close(); err != nil {
+			return urls, err
+		}
+		urls = append(urls, fmt.Sprintf(publicURL, bucketName, name))
+	}
+	return urls, nil
 }

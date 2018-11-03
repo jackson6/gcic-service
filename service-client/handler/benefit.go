@@ -1,13 +1,52 @@
 package handler
 
 import (
+	"cloud.google.com/go/storage"
+	"github.com/gorilla/mux"
 	"net/http"
 	"encoding/json"
 	"golang.org/x/net/context"
 	"github.com/jackson6/gcic-service/service-client/lib"
 	"github.com/jackson6/gcic-service/service-client/client"
 	pb "github.com/jackson6/gcic-service/benefit-service/proto/benefit"
+	partnerProto "github.com/jackson6/gcic-service/partner-service/proto/partner"
 )
+
+type PartnerBenefit struct {
+	Benefit *pb.Benefit `json:"benefit"`
+	Partner *partnerProto.Partner `json:"partner"`
+}
+
+func GetBenefitDetailsEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
+	defer r.Body.Close()
+
+	var data PartnerBenefit
+
+	params := mux.Vars(r)
+	id := params["id"]
+
+	benefitResp, err := service.Benefit.Get(context.Background(), &pb.Benefit{Id:id})
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+
+	partnerResp, err := service.Partner.Get(context.Background(), &partnerProto.Partner{Id:id})
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+
+	data.Benefit = benefitResp.Benefit
+	data.Partner = partnerResp.Partner
+
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: data,
+	}
+	RespondJSON(w, http.StatusOK, response)
+}
 
 func GetBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
 	defer r.Body.Close()
@@ -24,14 +63,25 @@ func GetBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *client.
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func CreateBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
+func CreateBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client, bucket *storage.BucketHandle, bucketName string) {
 	defer r.Body.Close()
-	benefit := new(pb.Benefit)
-	if err := json.NewDecoder(r.Body).Decode(&benefit); err != nil {
-		RespondError(w, http.StatusBadRequest, BadRequest, err)
+
+	r.ParseMultipartForm(32000 << 20)
+	benefit := pb.Benefit{
+		Id: r.FormValue("id"),
+		Title:  r.FormValue("title"),
+		Description: r.FormValue("description"),
+	}
+
+	imgUrls, err := lib.UploadMultipleFileFromForm(r, bucket, bucketName)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
 	}
-	resp, err := service.Benefit.Create(context.Background(), benefit)
+
+	benefit.Img = imgUrls
+
+	resp, err := service.Benefit.Create(context.Background(), &benefit)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return

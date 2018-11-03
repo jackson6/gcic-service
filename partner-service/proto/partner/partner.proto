@@ -17,7 +17,13 @@ message Partner {
     string parish = 4;
     string country = 5;
     string contact = 6;
-    string img = 7;
+    string logo = 7;
+    repeated Coord coord = 8;
+}
+
+message Coord {
+    float lat = 1;
+    float lon = 2;
 }
 
 message Request {}

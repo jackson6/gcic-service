@@ -13,11 +13,9 @@ service BenefitService {
 message Benefit {
     string id = 1;
     string title = 2;
-    string name = 3;
     string description = 4;
-    string address = 5;
-    string contact = 6;
-    repeated string img = 7;
+    string partner_id = 5;
+    repeated string img = 6;
 }
 
 message Request {}

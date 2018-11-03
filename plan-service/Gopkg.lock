@@ -2,13 +2,6 @@
 
 
 [[projects]]
-  digest = "1:6c0f1bc4d83abbdcb860204b7935b5cf072d449e225c33946b68968aa06d20a0"
-  name = "github.com/armon/go-metrics"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "3df31a1ada83e310c2e24b267c8e8b68836547b4"
-
-[[projects]]
   digest = "1:4be5d1a52c61b74c0a4d62f37c0640f706ae6e07eb73617dd013990d565717d5"
   name = "github.com/go-log/log"
   packages = [
@@ -42,22 +35,23 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:2689a8321275b0134f3cb86508981671e94d035096116cbbe03d6f3c67eb9e97"
+  digest = "1:949eed2f9570022751c2cd40777fbd1b45c04b932ea58874274286ba3a7566c8"
   name = "github.com/hashicorp/consul"
   packages = [
     "api",
     "watch",
   ]
   pruneopts = "UT"
-  revision = "48d287ef690ada66634885640f3444dbf7b71d18"
-  version = "v1.2.3"
+  revision = "e8757838a49feeb682c7e6ad6b78694a78b2096b"
+  version = "v1.3.0"
 
 [[projects]]
-  digest = "1:77cb3be9b21ba7f1a4701e870c84ea8b66e7d74c7c8951c58155fdadae9414ec"
+  digest = "1:f47d6109c2034cb16bd62b220e18afd5aa9d5a1630fe5d937ad96a4fb7cbb277"
   name = "github.com/hashicorp/go-cleanhttp"
   packages = ["."]
   pruneopts = "UT"
-  revision = "d5fe4b57a186c716b0e00b8c301cbd9b4182694d"
+  revision = "e8ab9daed8d1ddd2d3c4efba338fe2eeae2e4f18"
+  version = "v0.5.0"
 
 [[projects]]
   branch = "master"
@@ -68,11 +62,12 @@
   revision = "6bb64b370b90e7ef1fa532be9e591a81c3493e00"
 
 [[projects]]
-  digest = "1:acc81e4e4289587b257ccdfccbc6eaf16d4c2fb57dda73c6bb349bf50f02501f"
+  digest = "1:0dd7b7b01769f9df356dc99f9e4144bdbabf6c79041ea7c0892379c5737f3c44"
   name = "github.com/hashicorp/serf"
   packages = ["coordinate"]
   pruneopts = "UT"
-  revision = "19bbd39e421bdf3559d5025fb2c760f5ffa56233"
+  revision = "d6574a5bb1226678d7010325fb6c985db20ee458"
+  version = "v0.8.1"
 
 [[projects]]
   digest = "1:3e551bbb3a7c0ab2a2bf4660e7fcad16db089fdcfbb44b0199e62838038623ea"
@@ -227,12 +222,12 @@
   revision = "4b7ed83e8520ab8fe6e5ef61fa2ede94b32f8602"
 
 [[projects]]
-  digest = "1:fc5013a7a6f9600051ad48b059fef4a3035e8692d1c54ffd8dccfaa8ebe0b505"
+  digest = "1:c22d250c583ec1136ecad8b74a43f408c08ddbbcbae715341ec4a49f332628e0"
   name = "github.com/miekg/dns"
   packages = ["."]
   pruneopts = "UT"
-  revision = "ba6747e8a94115e9dc7738afb87850687611df1b"
-  version = "v1.0.12"
+  revision = "915ca3d5ffd945235828a097c917311a9d86ebb4"
+  version = "v1.0.14"
 
 [[projects]]
   digest = "1:78bbb1ba5b7c3f2ed0ea1eab57bdd3859aec7e177811563edc41198a760b06af"
@@ -251,11 +246,12 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:56a0bd1a1f3809171d1abe0bfd389558be0cd672e858e1f831b88f806aa8764f"
+  digest = "1:53bc4cd4914cd7cd52139990d5170d6dc99067ae31c56530621b18b35fc30318"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
   pruneopts = "UT"
-  revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
+  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
+  version = "v1.1.2"
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -298,11 +294,11 @@
     "ed25519/internal/edwards25519",
   ]
   pruneopts = "UT"
-  revision = "e3636079e1a4c1f337f212cc5cd2aca108f6c900"
+  revision = "4d3f4d9ffa16a13f451c3b2999e9c49e9750bf06"
 
 [[projects]]
   branch = "master"
-  digest = "1:4ab551743538ce88c540073958b2fb653ca077c5d4c3d1991d86016dd38e22f6"
+  digest = "1:d418ece396106bca7089040a80f22ef0c93f6aad6469663806f8fab149066831"
   name = "golang.org/x/net"
   packages = [
     "bpf",
@@ -319,15 +315,15 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "4dfa2610cdf3b287375bbba5b8f2a14d3b01d8de"
+  revision = "c10e9556a7bc0e7c942242b606f0acf024ad5d6a"
 
 [[projects]]
   branch = "master"
-  digest = "1:e2ced6fdf654069e8713c96012275fbd245381673d53e8c8ace640b28441a28b"
+  digest = "1:35560529f5721d65f36dc23aa15fbf7306c5091cdc3f29f65881af5031b80cc8"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "e4b3c5e9061176387e7cea65e4dc5853801f3fb7"
+  revision = "9b800f95dbbc54abff0acf7ee32d88ba4e328c89"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"
@@ -358,7 +354,7 @@
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
   pruneopts = "UT"
-  revision = "8b5d7a19e2d98fbad9aaf9c599776bf066d7c70f"
+  revision = "c830210a61dfaa790e1920f8d0470fc27bc2efbe"
 
 [[projects]]
   branch = "v2"

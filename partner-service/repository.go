@@ -33,7 +33,13 @@ type Partner struct {
 	Parish string `bson:"parish"json:"parish"`
 	Country string `bson:"country"json:"country"`
 	Contact string `bson:"contact"json:"contact"`
-	Img string `bson:"img"json:"img"`
+	Logo string `bson:"logo"json:"logo"`
+	Coord []Coord `bson:"coord"json:"coord"`
+}
+
+type Coord struct {
+	Lat float64 `bson:"lat"json:"lat"`
+	Lon float64 `bson:"long"json:"long"`
 }
 
 // Create a new user

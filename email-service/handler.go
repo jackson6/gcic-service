@@ -38,7 +38,7 @@ func (s *service) BuildMessage(mail *pb.ContactUs) *Mail {
 	message += fmt.Sprintf("To: %s\r\n", strings.Join([]string{s.smtpServer.addr}, ";"))
 
 	message += fmt.Sprintf("Subject: %s\r\n", "Contact Us")
-	message += "\r\n" + "Name: " + mail.Name + "\nEmail: " + mail.Email + "\nPhone: " + mail.Phone + "\n" + mail.Message
+	message += "\r\n" + "Name: " + mail.Name + "\nEmail: " + mail.Email + "\nCompany: " + mail.Company + "\nPhone: " + mail.Phone + "\n" + mail.Message
 	data.message = message
 	data.to = []string{s.smtpServer.addr}
 	data.from = mail.Email
