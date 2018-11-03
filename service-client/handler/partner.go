@@ -9,6 +9,7 @@ import (
 	"golang.org/x/net/context"
 	pb "github.com/jackson6/gcic-service/partner-service/proto/partner"
 	"github.com/jackson6/gcic-service/service-client/client"
+	"strconv"
 )
 
 func GetPartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
@@ -29,6 +30,14 @@ func GetPartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.
 func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client, bucket *storage.BucketHandle, bucketName string) {
 	defer r.Body.Close()
 
+	lat, _ := strconv.ParseFloat(r.FormValue("lat"), 32)
+	lon, _ := strconv.ParseFloat(r.FormValue("lon"), 32)
+
+	coords := pb.Coord{
+		Lat: float32(lat),
+		Lon: float32(lon),
+	}
+
 	r.ParseMultipartForm(32000 << 20)
 	partner := pb.Partner{
 		Name: r.FormValue("name"),
@@ -36,6 +45,7 @@ func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 		Parish: r.FormValue("parish"),
 		Country: r.FormValue("country"),
 		Contact: r.FormValue("contact"),
+		Coord: &coords,
 	}
 
 	log.Println(partner)
@@ -46,7 +56,7 @@ func CreatePartnerEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 		return
 	}
 
-	partner.Img = imgUrl
+	partner.Logo = imgUrl
 
 	resp, err := service.Partner.Create(context.Background(), &partner)
 	if err != nil {

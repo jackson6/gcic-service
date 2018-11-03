@@ -34,7 +34,7 @@ type Partner struct {
 	Country string `bson:"country"json:"country"`
 	Contact string `bson:"contact"json:"contact"`
 	Logo string `bson:"logo"json:"logo"`
-	Coord []Coord `bson:"coord"json:"coord"`
+	Coord Coord `bson:"coord"json:"coord"`
 }
 
 type Coord struct {

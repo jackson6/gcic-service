@@ -18,7 +18,7 @@ message Partner {
     string country = 5;
     string contact = 6;
     string logo = 7;
-    repeated Coord coord = 8;
+    Coord coord = 8;
 }
 
 message Coord {
