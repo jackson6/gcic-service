@@ -12,6 +12,7 @@ service UserService {
     rpc GetUsers(Id) returns (Response) {}
     rpc GetByEmail(User) returns (Response) {}
     rpc GetByMemberId(User) returns (Response) {}
+    rpc GetUserReferral(User) returns (Response) {}
 }
 
 message Id {
@@ -44,6 +45,7 @@ message User {
     string referral_code = 23;
     int64 membership_exp = 24;
     string profile_pic = 25;
+    int32 count = 26;
 }
 
 message Token {

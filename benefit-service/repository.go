@@ -27,10 +27,8 @@ type Repository interface {
 type Benefit struct {
 	Id bson.ObjectId `bson:"_id"json:"id"`
 	Title string `bson:"title"json:"title"`
-	Name string `bson:"name"json:"name"`
 	Description string `bson:"description"json:"description"`
-	Contact string `bson:"contact"json:"contact"`
-	Address string `bson:"address"json:"address"`
+	PartnerId string `bson:"partner_id"json:"partner_id"`
 	Img []string `bson:"img"json:"img"`
 }
 

@@ -31,7 +31,7 @@ func GetBenefitDetailsEndPoint(w http.ResponseWriter, r *http.Request, service *
 		return
 	}
 
-	partnerResp, err := service.Partner.Get(context.Background(), &partnerProto.Partner{Id:id})
+	partnerResp, err := service.Partner.Get(context.Background(), &partnerProto.Partner{Id:benefitResp.Benefit.PartnerId})
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -71,6 +71,7 @@ func CreateBenefitEndPoint(w http.ResponseWriter, r *http.Request, service *clie
 		Id: r.FormValue("id"),
 		Title:  r.FormValue("title"),
 		Description: r.FormValue("description"),
+		PartnerId: r.FormValue("partner_id"),
 	}
 
 	imgUrls, err := lib.UploadMultipleFileFromForm(r, bucket, bucketName)

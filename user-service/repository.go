@@ -14,6 +14,7 @@ type Repository interface {
 	Delete(*pb.User) error
 	All() ([]*pb.User, error)
 	Get(string) (*pb.User, error)
+	GetReferrals(string) ([]*pb.User, error)
 	GetByEmail(string) (*pb.User, error)
 	GetByMemberId(string) (*pb.User, error)
 	GetUsers([]string) ([]*pb.User, error)
@@ -74,25 +75,22 @@ func (repo *UserRepository) GetUsers(id []string) ([]*pb.User, error) {
 	return users, nil
 }
 
-//func (repo *UserRepository) GetUsers(id []string) ([]*pb.User, error) {
-//	var users []*pb.User
-//	rows, err := repo.db.Raw(`select id, first_name, last_name, dob, email, trn, parish, country, address, cell_phone,
-//									home_phone, address2, member_id, gender, initial, plan_id, sponsor_id, referral_code
-//									from users where IN (?)`, id).Rows()
-//	if err != nil {
-//		return nil, err
-//	}
-//	defer rows.Close()
-//	for rows.Next() {
-//		user := new(pb.User)
-//		rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Dob, &user.Email, &user.Trn, &user.Parish,
-//					&user.Country, &user.Address, &user.CellPhone, &user.HomePhone, &user.Address2, &user.MemberId,
-//					&user.Gender, &user.Initial, &user.PlanId, &user.SponsorId, &user.ReferralCode)
-//		users = append(users, user)
-//	}
-//
-//	return users, nil
-//}
+func (repo *UserRepository) GetReferrals(code string) ([]*pb.User, error) {
+	var users []*pb.User
+	rows, err := repo.db.Raw(`SELECT a.id, a.first_name, a.last_name, (SELECT count(*) FROM users 
+									WHERE sponsor_id = a.referral_code) FROM users a WHERE referral_code = 'DLDA-JGB9-51AW';`, code).Rows()
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		user := new(pb.User)
+		rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Count)
+		users = append(users, user)
+	}
+
+	return users, nil
+}
 
 func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
 	user := &pb.User{}

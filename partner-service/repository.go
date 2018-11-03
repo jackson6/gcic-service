@@ -39,7 +39,7 @@ type Partner struct {
 
 type Coord struct {
 	Lat float64 `bson:"lat"json:"lat"`
-	Lon float64 `bson:"long"json:"long"`
+	Lon float64 `bson:"lon"json:"lon"`
 }
 
 // Create a new user

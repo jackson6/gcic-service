@@ -97,6 +97,16 @@ func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error
 	return nil
 }
 
+func (s *service) GetUserReferral(ctx context.Context, req *pb.User, res *pb.Response) error {
+	users, err := s.repo.GetReferrals(req.ReferralCode)
+	if err != nil {
+		log.Println("error", err)
+		return err
+	}
+	res.Users = users
+	return nil
+}
+
 func (s *service) GetByEmail(ctx context.Context, req *pb.User, res *pb.Response) error {
 	user, err := s.repo.GetByEmail(req.Email)
 	if err != nil {
