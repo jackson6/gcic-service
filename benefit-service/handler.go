@@ -7,7 +7,6 @@ import (
 	pb "github.com/jackson6/gcic-service/benefit-service/proto/benefit"
 	"golang.org/x/net/context"
 	"gopkg.in/mgo.v2"
-	"log"
 )
 
 // Service should implement all of the methods to satisfy the service
