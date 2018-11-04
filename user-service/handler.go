@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"firebase.google.com/go"
 	paymentProto "github.com/jackson6/gcic-service/payment-service/proto/payment"
+	planProto "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
 	"github.com/micro/go-micro/broker"
 	"golang.org/x/net/context"
@@ -24,6 +25,7 @@ type service struct {
 	firebase *firebase.App
 	PubSub broker.Broker
 	paymentClient paymentProto.PaymentServiceClient
+	planClient planProto.PlanServiceClient
 }
 
 // CreateUser - we created just one method on our service,
@@ -98,7 +100,13 @@ func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error
 }
 
 func (s *service) GetUserReferral(ctx context.Context, req *pb.User, res *pb.Response) error {
-	users, err := s.repo.GetReferrals(req.ReferralCode)
+	resp, err := s.planClient.All(ctx, &planProto.Request{})
+	if err != nil {
+		log.Println("error", err)
+		return err
+	}
+
+	users, err := s.repo.GetReferrals(req.ReferralCode, resp.Plans)
 	if err != nil {
 		log.Println("error", err)
 		return err

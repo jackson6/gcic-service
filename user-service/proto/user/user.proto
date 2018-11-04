@@ -46,6 +46,7 @@ message User {
     int64 membership_exp = 24;
     string profile_pic = 25;
     int32 count = 26;
+    int32 level = 27;
 }
 
 message Token {

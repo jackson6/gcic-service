@@ -2,14 +2,15 @@ package handler
 
 import (
 	"cloud.google.com/go/storage"
-	"github.com/gorilla/mux"
-	"net/http"
 	"encoding/json"
-	"golang.org/x/net/context"
-	"github.com/jackson6/gcic-service/service-client/lib"
-	"github.com/jackson6/gcic-service/service-client/client"
+	"github.com/emicklei/go-restful"
 	pb "github.com/jackson6/gcic-service/benefit-service/proto/benefit"
 	partnerProto "github.com/jackson6/gcic-service/partner-service/proto/partner"
+	"github.com/jackson6/gcic-service/service-client/client"
+	"github.com/jackson6/gcic-service/service-client/lib"
+	"golang.org/x/net/context"
+	"log"
+	"net/http"
 )
 
 type PartnerBenefit struct {
@@ -17,19 +18,20 @@ type PartnerBenefit struct {
 	Partner *partnerProto.Partner `json:"partner"`
 }
 
-func GetBenefitDetailsEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client) {
-	defer r.Body.Close()
+func GetBenefitDetailsEndPoint(w http.ResponseWriter, r *restful.Request, service *client.Client) {
+	defer r.Request.Body.Close()
 
 	var data PartnerBenefit
-
-	params := mux.Vars(r)
-	id := params["id"]
+	
+	id := r.PathParameter("id")
 
 	benefitResp, err := service.Benefit.Get(context.Background(), &pb.Benefit{Id:id})
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
 	}
+
+	log.Println(benefitResp.Benefit)
 
 	partnerResp, err := service.Partner.Get(context.Background(), &partnerProto.Partner{Id:benefitResp.Benefit.PartnerId})
 	if err != nil {

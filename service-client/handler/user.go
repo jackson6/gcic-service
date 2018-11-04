@@ -3,7 +3,7 @@ package handler
 import (
 	"cloud.google.com/go/storage"
 	"encoding/json"
-	"github.com/gorilla/mux"
+	"github.com/emicklei/go-restful"
 	paymentProto "github.com/jackson6/gcic-service/payment-service/proto/payment"
 	planProto "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	"github.com/jackson6/gcic-service/service-client/client"
@@ -23,11 +23,10 @@ func GetUserEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User){
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func GetUserEmailEndPoint(w http.ResponseWriter, r *http.Request, service *client.Client){
-	defer r.Body.Close()
-	
-	params := mux.Vars(r)
-	id := params["id"]
+func GetUserEmailEndPoint(w http.ResponseWriter, r *restful.Request, service *client.Client){
+	defer r.Request.Body.Close()
+
+	id := r.PathParameter("id")
 
 	user := new(pb.User)
 
@@ -43,6 +42,23 @@ func GetUserEmailEndPoint(w http.ResponseWriter, r *http.Request, service *clien
 		ResultCode: 200,
 		CodeContent: "Success",
 		Data: user,
+	}
+	RespondJSON(w, http.StatusOK, response)
+}
+
+func GetUserReferralEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client){
+	defer r.Body.Close()
+
+	resp, err := service.User.GetUserReferral(context.Background(), user)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: resp.Users,
 	}
 	RespondJSON(w, http.StatusOK, response)
 }
@@ -73,15 +89,18 @@ func CreateUserEndPoint(w http.ResponseWriter, r *http.Request, service *client.
 func UpdateUserEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client){
 	defer r.Body.Close()
 
-	var update pb.User
+	update := new(pb.User)
 	if err := json.NewDecoder(r.Body).Decode(&update); err != nil {
 		RespondError(w, http.StatusBadRequest, BadRequest, err)
 		return
 	}
 
-	newUser := lib.UpdateBuilder(user, update)
+	update.Id = user.Id
 
-	_, err := service.User.Update(context.Background(), newUser.(*pb.User))
+	//updated := lib.UpdateBuilder(user, update)
+	//newUser := updated.(pb.User)
+
+	_, err := service.User.Update(context.Background(), update)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -90,7 +109,6 @@ func UpdateUserEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, s
 	response := HttpResponse{
 		ResultCode: 200,
 		CodeContent: "Success",
-		Data: newUser,
 	}
 	RespondJSON(w, http.StatusOK, response)
 }
@@ -139,13 +157,13 @@ func UploadProfilePicEndPoint(w http.ResponseWriter, r *http.Request, user *pb.U
 		return
 	}
 
-	user = &pb.User{Id:"1234"}
 	update := &pb.User{ProfilePic:imgUrl}
+	update.Id = user.Id
 
-	updated := lib.UpdateBuilder(*user, update)
-	newUser := updated.(pb.User)
+	//updated := lib.UpdateBuilder(user, update)
+	//newUser := updated.(pb.User)
 
-	_, err = service.User.Update(context.Background(), &newUser)
+	_, err = service.User.Update(context.Background(), update)
 	if err != nil {
 		RespondError(w, http.StatusInternalServerError, InternalError, err)
 		return
@@ -154,7 +172,6 @@ func UploadProfilePicEndPoint(w http.ResponseWriter, r *http.Request, user *pb.U
 	response := HttpResponse{
 		ResultCode: 200,
 		CodeContent: "Success",
-		Data: newUser,
 	}
 	RespondJSON(w, http.StatusOK, response)
 }

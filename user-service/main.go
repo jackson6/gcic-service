@@ -13,6 +13,7 @@ import (
 	"os"
 
 	paymentService "github.com/jackson6/gcic-service/payment-service/proto/payment"
+	planService "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	userService "github.com/jackson6/gcic-service/user-service/proto/user"
 )
 
@@ -57,6 +58,7 @@ func main() {
 	)
 
 	paymentClient := paymentService.NewPaymentServiceClient("payment", srv.Client())
+	planClient := planService.NewPlanServiceClient("plan", srv.Client())
 
 	// Init will parse the command line flags.
 	srv.Init()
@@ -66,7 +68,7 @@ func main() {
 	// Register our service with the gRPC server, this will tie our
 	// implementation into the auto-generated interface code for our
 	// protobuf definition.
-	userService.RegisterUserServiceHandler(srv.Server(), &service{repo, firebase, pubsub, paymentClient})
+	userService.RegisterUserServiceHandler(srv.Server(), &service{repo, firebase, pubsub, paymentClient, planClient})
 
 	// Run the server
 	if err := srv.Run(); err != nil {

@@ -4,6 +4,7 @@ package main
 
 import (
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
+	planProto "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	"github.com/jinzhu/gorm"
 	"log"
 )
@@ -14,7 +15,7 @@ type Repository interface {
 	Delete(*pb.User) error
 	All() ([]*pb.User, error)
 	Get(string) (*pb.User, error)
-	GetReferrals(string) ([]*pb.User, error)
+	GetReferrals(string, []*planProto.Plan) ([]*pb.User, error)
 	GetByEmail(string) (*pb.User, error)
 	GetByMemberId(string) (*pb.User, error)
 	GetUsers([]string) ([]*pb.User, error)
@@ -33,8 +34,10 @@ func (repo *UserRepository) Create(user *pb.User) error {
 }
 
 // Create a new user
-func (repo *UserRepository) Update(user *pb.User) error {
-	if err := repo.db.Update(user).Error; err != nil {
+func (repo *UserRepository) Update(update *pb.User) error {
+	var user pb.User
+	user.Id = update.Id
+	if err := repo.db.First(&user).Update(update).Error; err != nil {
 		return err
 	}
 	return nil
@@ -75,17 +78,19 @@ func (repo *UserRepository) GetUsers(id []string) ([]*pb.User, error) {
 	return users, nil
 }
 
-func (repo *UserRepository) GetReferrals(code string) ([]*pb.User, error) {
+func (repo *UserRepository) GetReferrals(code string, plans []*planProto.Plan) ([]*pb.User, error) {
 	var users []*pb.User
-	rows, err := repo.db.Raw(`SELECT a.id, a.first_name, a.last_name, (SELECT count(*) FROM users 
-									WHERE sponsor_id = a.referral_code) FROM users a WHERE referral_code = 'DLDA-JGB9-51AW';`, code).Rows()
+	rows, err := repo.db.Raw(`SELECT a.id, a.first_name, a.last_name, a.profile_pic, a.plan_id, a.level,
+									(SELECT count(*) FROM users WHERE sponsor_id = a.referral_code) FROM users a
+									WHERE sponsor_id = ?`, code).Rows()
 	if err != nil {
 		return nil, err
 	}
+
 	defer rows.Close()
 	for rows.Next() {
 		user := new(pb.User)
-		rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Count)
+		rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.ProfilePic, &user.PlanId, &user.Level, &user.Count)
 		users = append(users, user)
 	}
 

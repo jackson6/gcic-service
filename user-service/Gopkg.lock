@@ -128,9 +128,12 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:15919aa6f971ffaa3af5b8257189af22e35664f68365f79ed865d7f8ed2ee4be"
+  digest = "1:387e303650046d80938b2112bf44ae1c09a2ca084872e86d64745e12920b6f1d"
   name = "github.com/jackson6/gcic-service"
-  packages = ["payment-service/proto/payment"]
+  packages = [
+    "payment-service/proto/payment",
+    "plan-service/proto/plan",
+  ]
   pruneopts = "UT"
   revision = "6806f3d2fb1aafd30088372e821b25426d12bc3f"
 
@@ -593,6 +596,7 @@
     "github.com/captaincodeman/couponcode",
     "github.com/golang/protobuf/proto",
     "github.com/jackson6/gcic-service/payment-service/proto/payment",
+    "github.com/jackson6/gcic-service/plan-service/proto/plan",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",
     "github.com/micro/go-micro",

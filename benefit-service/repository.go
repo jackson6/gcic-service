@@ -74,7 +74,7 @@ func (repo *BenefitRepository) Delete(benefit *pb.Benefit) (error) {
 }
 
 func (repo *BenefitRepository) Update(benefit *pb.Benefit) (error) {
-	err := repo.collection().Update(bson.ObjectIdHex(benefit.Id), &benefit)
+	err := repo.collection().UpdateId(bson.ObjectIdHex(benefit.Id), &benefit)
 	if err != nil {
 		return err
 	}
