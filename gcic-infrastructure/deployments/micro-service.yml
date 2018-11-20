@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: micro
 spec:
-  type: LoadBalancer
   ports:
   - name: api-http
     port: 80

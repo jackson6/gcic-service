@@ -100,13 +100,7 @@ func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error
 }
 
 func (s *service) GetUserReferral(ctx context.Context, req *pb.User, res *pb.Response) error {
-	resp, err := s.planClient.All(ctx, &planProto.Request{})
-	if err != nil {
-		log.Println("error", err)
-		return err
-	}
-
-	users, err := s.repo.GetReferrals(req.ReferralCode, resp.Plans)
+		users, err := s.repo.GetReferrals(req.ReferralCode)
 	if err != nil {
 		log.Println("error", err)
 		return err

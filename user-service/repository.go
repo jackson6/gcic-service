@@ -4,7 +4,6 @@ package main
 
 import (
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
-	planProto "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	"github.com/jinzhu/gorm"
 	"log"
 )
@@ -15,7 +14,7 @@ type Repository interface {
 	Delete(*pb.User) error
 	All() ([]*pb.User, error)
 	Get(string) (*pb.User, error)
-	GetReferrals(string, []*planProto.Plan) ([]*pb.User, error)
+	GetReferrals(string) ([]*pb.User, error)
 	GetByEmail(string) (*pb.User, error)
 	GetByMemberId(string) (*pb.User, error)
 	GetUsers([]string) ([]*pb.User, error)
@@ -78,7 +77,7 @@ func (repo *UserRepository) GetUsers(id []string) ([]*pb.User, error) {
 	return users, nil
 }
 
-func (repo *UserRepository) GetReferrals(code string, plans []*planProto.Plan) ([]*pb.User, error) {
+func (repo *UserRepository) GetReferrals(code string) ([]*pb.User, error) {
 	var users []*pb.User
 	rows, err := repo.db.Raw(`SELECT a.id, a.first_name, a.last_name, a.profile_pic, a.plan_id, a.level,
 									(SELECT count(*) FROM users WHERE sponsor_id = a.referral_code) FROM users a

@@ -192,3 +192,20 @@ func PaymentHistoryEndPoint(w http.ResponseWriter, r *http.Request, user *pb.Use
 	}
 	RespondJSON(w, http.StatusOK, response)
 }
+
+func Messages(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client){
+	defer r.Body.Close()
+
+	req := paymentProto.Transaction{UserId: user.Id}
+	resp, err := service.Payment.History(context.Background(), &req)
+	if err != nil {
+		RespondError(w, http.StatusInternalServerError, InternalError, err)
+		return
+	}
+	response := HttpResponse{
+		ResultCode: 200,
+		CodeContent: "Success",
+		Data: resp.Transactions,
+	}
+	RespondJSON(w, http.StatusOK, response)
+}

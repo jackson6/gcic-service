@@ -1,27 +1,16 @@
-// chat-service/main.go
 package main
 
 import (
-	"github.com/micro/go-web"
-	k8s "github.com/micro/kubernetes/go/web"
+	chatService "github.com/jackson6/gcic-service/chat-service/proto/chat"
+	userService "github.com/jackson6/gcic-service/user-service/proto/user"
+	k8s "github.com/micro/kubernetes/go/micro"
+	"github.com/micro/go-micro"
 	"log"
-	"os"
-)
-
-const (
-	defaultHost = "localhost:27017"
 )
 
 func main() {
 
-	// Database host from the environment variables
-	host := os.Getenv("DB_HOST")
-
-	if host == "" {
-		host = defaultHost
-	}
-
-	session, err := CreateSession(host)
+	session, err := CreateSession()
 
 
 	// Mgo creates a 'master' session, we need to end that session
@@ -32,32 +21,22 @@ func main() {
 
 		// We're wrapping the error returned from our CreateSession
 		// here to add some context to the error.
-		log.Panicf("Could not connect to datastore with host %s - %v", host, err)
+		log.Panicf("Could not connect to datastore - %v", err)
 	}
-
-	repo := &ChatRepository{session}
 
 	srv := k8s.NewService(
-		web.Name("chat"),
-		web.Version("latest"),
+		micro.Name("payment"),
+		micro.Version("latest"),
 	)
 
-	if err := srv.Init(); err != nil {
-		log.Fatal(err)
-	}
+	userClient := userService.NewUserServiceClient("payment", srv.Client())
 
-	hub := newHub(repo)
+	srv.Init()
 
-	go hub.run()
-
-	// Register Handler
-	srv.HandleFunc("/chat", hub.handleWebSocket)
-	srv.HandleFunc("/online", hub.online)
-	srv.HandleFunc("/message", hub.messages)
+	chatService.RegisterChatServiceHandler(srv.Server(), &service{ session, userClient})
 
 	// Run the server
 	if err := srv.Run(); err != nil {
 		log.Fatal(err)
 	}
-
 }

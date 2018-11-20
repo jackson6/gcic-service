@@ -13,8 +13,6 @@ const (
 	benefitCollection = "benefits"
 )
 
-
-
 type Repository interface {
 	Create(*pb.Benefit) (*pb.Benefit, error)
 	All(*pb.Request) ([]*Benefit, error)
@@ -28,7 +26,7 @@ type Benefit struct {
 	Id bson.ObjectId `bson:"_id"json:"id"`
 	Title string `bson:"title"json:"title"`
 	Description string `bson:"description"json:"description"`
-	PartnerId string `bson:"partner_id"json:"partner_id"`
+	PartnerId string `bson:"partnerid"json:"partner_id"`
 	Img []string `bson:"img"json:"img"`
 }
 

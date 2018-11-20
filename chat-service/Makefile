@@ -9,5 +9,5 @@ run:
 		-e MICRO_SERVER_ADDRESS=:50054 \
 		-e DISABLE_AUTH=false \
 		-e MICRO_REGISTRY=mdns \
-		-e DB_HOST=mongodb\://gcic\:dreamer6@ds163330.mlab.com\:63330/invest \
+		-e MONGO_HOST=mongodb\://gcic\:dreamer6@ds163330.mlab.com\:63330/invest \
 		chat-service
