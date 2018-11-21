@@ -162,13 +162,3 @@ func (hub *Hub) onDisconnect(client *Client) {
 	delete(hub.clients, client.id)
 	close(client.outbound)
 }
-
-func (hub *Hub) online(w http.ResponseWriter, r *http.Request) {
-	response := HttpResponse{
-		ResultCode: 200,
-		CodeContent: "Success",
-		Data: hub.clients,
-	}
-	log.Println(hub.clients)
-	RespondJSON(w, http.StatusOK, response)
-}

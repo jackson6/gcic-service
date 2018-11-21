@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	defaultHost = "localhost:27017"
+	defaultHost = "mongo:27017"
 )
 
 func main() {

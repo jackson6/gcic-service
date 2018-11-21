@@ -2,17 +2,6 @@
 
 
 [[projects]]
-  digest = "1:0594af97b2f4cec6554086eeace6597e20a4b69466eb4ada25adf9f4300dddd2"
-  name = "github.com/garyburd/redigo"
-  packages = [
-    "internal",
-    "redis",
-  ]
-  pruneopts = "UT"
-  revision = "a69d19351219b6dd56f274f96d85a7014a2ec34e"
-  version = "v1.6.0"
-
-[[projects]]
   digest = "1:4be5d1a52c61b74c0a4d62f37c0640f706ae6e07eb73617dd013990d565717d5"
   name = "github.com/go-log/log"
   packages = [
@@ -81,6 +70,14 @@
   pruneopts = "UT"
   revision = "d6574a5bb1226678d7010325fb6c985db20ee458"
   version = "v0.8.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:08c20fce3352aaea68cf43c9eed51d8a787edc59f60f76871981ea14ba751ece"
+  name = "github.com/jackson6/gcic-service"
+  packages = ["chat-service/proto/chat"]
+  pruneopts = "UT"
+  revision = "49c83e3c606387088dce1dc70c68a977345dbaa4"
 
 [[projects]]
   branch = "master"
@@ -201,12 +198,8 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/garyburd/redigo/redis",
-    "github.com/golang/protobuf/proto",
     "github.com/gorilla/websocket",
-    "github.com/micro/go-micro/client",
-    "github.com/micro/go-micro/server",
-    "golang.org/x/net/context",
+    "github.com/jackson6/gcic-service/chat-service/proto/chat",
     "gopkg.in/mgo.v2",
     "gopkg.in/mgo.v2/bson",
   ]

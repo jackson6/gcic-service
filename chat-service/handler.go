@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-	"gopkg.in/mgo.v2"
+	"encoding/json"
 	pb "github.com/jackson6/gcic-service/chat-service/proto/chat"
 	userProto "github.com/jackson6/gcic-service/user-service/proto/user"
+	"gopkg.in/mgo.v2"
 )
 
 // Service should implement all of the methods to satisfy the service
@@ -16,6 +17,28 @@ type service struct {
 	userClient userProto.UserServiceClient
 }
 
+func converter(data interface{}, dataType int) (interface{}, error){
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	if dataType == 0 {
+		message := new(pb.Message)
+		err = json.Unmarshal(jsonData, &message)
+		if err != nil {
+			return nil, err
+		}
+		return message, nil
+	} else {
+		messages := make([]*pb.Message, 0)
+		err = json.Unmarshal(jsonData, &messages)
+		if err != nil {
+			return nil, err
+		}
+		return messages, nil
+	}
+}
+
 func (s *service) GetRepo() Repository {
 	return &ChatRepository{s.session.Clone()}
 }
@@ -24,10 +47,25 @@ func (s *service) Messages(ctx context.Context, req *pb.MessageReq, res *pb.Resp
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	data, err := repo.Messages(req)
+	data := new(pb.MessageResp)
+
+	messages, err := repo.Messages(req)
 	if err != nil {
 		return err
 	}
+
+	if len(messages) > 0 {
+		data.NextTime = messages[len(messages) - 1].Time
+		data.NextId = messages[len(messages) - 1].Id.Hex()
+	}
+
+	result, err := converter(messages, 2)
+	if err != nil {
+		return err
+	}
+
+	data.Messages = result.([]*pb.Message)
+
 	res.Messages = data
 	// Return matching the `Response` message we created in our
 	// protobuf definition.
@@ -38,7 +76,7 @@ func (s *service) Contacts(ctx context.Context, user *pb.User, res *pb.Response)
 	repo := s.GetRepo()
 	defer repo.Close()
 
-	response, err := s.userClient.GetUserReferral(context.Background(), &userProto.User{ReferralCode:user.ReferralCode})
+	response, err := s.userClient.GetUserReferral(context.Background(), &userProto.User{Id: user.Id, ReferralCode:user.ReferralCode})
 	if err != nil {
 		return err
 	}

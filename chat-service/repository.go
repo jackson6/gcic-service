@@ -9,11 +9,11 @@ import (
 
 const (
 	dbName = "invest"
-	chatCollection = "chat"
+	chatCollection = "messages"
 )
 
 type Repository interface {
-	Messages(*pb.MessageReq) (*pb.MessageResp, error)
+	Messages(*pb.MessageReq) ([]*Message, error)
 	Contacts([]*userProto.User, string) ([]*pb.ContactResp, error)
 	Close()
 }
@@ -23,30 +23,42 @@ type ChatRepository struct {
 
 }
 
+type Message struct {
+	Id       bson.ObjectId `bson:"_id"json:"id"`
+	Event 	 string 	   `bson:"event"json:"event"`
+	To       string        `bson:"to"json:"to"`
+	From     string        `bson:"from"json:"from"`
+	Time     int64         `bson:"time"json:"time"`
+	Text     string        `bson:"text"json:"text"`
+	Seen     bool          `bson:"seen"json:"seen"`
+	Received bool          `bson:"received"json:"received"`
+}
+
 func (repo *ChatRepository) Contacts(users []*userProto.User, to string) ([]*pb.ContactResp, error) {
 	var contactData []*pb.ContactResp
 
 	for _, user := range users {
 		message := new(pb.Message)
 		count, err := repo.collection().Find(bson.M{"from": user.Id, "to": to, "seen": false}).Count()
-		if err != nil {
+		if err != nil && err.Error() != "not found" {
 			return nil, err
 		}
 		err = repo.collection().Find(bson.M{"$or": []bson.M{bson.M{"from": user.Id, "to": to}, bson.M{"from": to, "to": user.Id}}}).Sort("-time", "-_id").One(&message)
-		if err != nil {
+		if err != nil && err.Error() != "not found" {
 			return nil, err
 		}
-		contactData = append(contactData, &pb.ContactResp{Unread: int64(count), From: user.Id, Message: message})
+		contactData = append(contactData, &pb.ContactResp{FirstName: user.FirstName, LastName: user.LastName,
+				ProfilePic: user.ProfilePic, Unread: int64(count), Id: user.Id, LastMessage: message})
 	}
 
 	return contactData, nil
 }
 
-func (repo *ChatRepository) Messages(req *pb.MessageReq) (*pb.MessageResp, error) {
-	var resp *pb.MessageResp
+func (repo *ChatRepository) Messages(req *pb.MessageReq) ([]*Message, error) {
+	var messages []*Message
 
 	if req.NextTime == 0 {
-		err := repo.collection().Find(bson.M{"$or": []bson.M{bson.M{"from": req.From, "to": req.To}, bson.M{"from": req.To, "to": req.From}}}).Sort("-time", "-_id").Limit(6).All(&resp.Messages)
+		err := repo.collection().Find(bson.M{"$or": []bson.M{bson.M{"from": req.From, "to": req.To}, bson.M{"from": req.To, "to": req.From}}}).Sort("-time", "-_id").Limit(6).All(&messages)
 		if err != nil {
 			return nil, err
 		}
@@ -54,12 +66,12 @@ func (repo *ChatRepository) Messages(req *pb.MessageReq) (*pb.MessageResp, error
 		err := repo.collection().Find(bson.M{"$or": []bson.M{bson.M{"$or": []bson.M{bson.M{"from": req.From, "to": req.To, "time": bson.M{"$lt": req.NextTime}},
 			bson.M{"from": req.To, "to": req.From, "time": bson.M{"$lt": req.NextTime}}}},
 			bson.M{"$or": []bson.M{bson.M{"from": req.From, "to": req.To, "time": bson.M{"$lt": req.NextTime}},
-				bson.M{"from": req.To, "to": req.From, "time": req.NextTime, "_id": bson.M{"$lt": req.NextId}}}}}}).Sort("-_id").Limit(6).All(&resp.Messages)
+				bson.M{"from": req.To, "to": req.From, "time": req.NextTime, "_id": bson.M{"$lt": req.NextId}}}}}}).Sort("-_id").Limit(6).All(&messages)
 		if err != nil {
 			return nil, err
 		}
 	}
-	return resp, nil
+	return messages, nil
 }
 
 // Close closes the database session after each query has ran.

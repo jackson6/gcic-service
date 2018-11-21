@@ -5,7 +5,6 @@ package main
 import (
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
 	"github.com/jinzhu/gorm"
-	"log"
 )
 
 type Repository interface {
@@ -65,7 +64,6 @@ func (repo *UserRepository) Get(id string) (*pb.User, error) {
 	if err := repo.db.First(&user).Error; err != nil {
 		return nil, err
 	}
-	log.Println(user)
 	return &user, nil
 }
 

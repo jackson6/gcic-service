@@ -22,16 +22,8 @@ spec:
           "--server_address=:8080",
         ]
         env:
-        - name: MONGO_HOST
+        - name: DB_HOST
           value: "mongo:27017"
-        - name: POSTGRES_HOST
-          value: "postgres:5432"
-        - name: POSTGRES_NAME
-          value: "gcic"
-        - name: POSTGRES_PASS
-          value: ""
-        - name: POSTGRES_USER
-          value: "postgres"
         - name: UPDATED_AT
           value: "Sun 19 Sep 2018 14:38:58 GMT"
         ports:
