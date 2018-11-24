@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package go.micro.srv.email;
+
+service EmailService {
+    rpc Contact(ContactUs) returns (Response) {}
+    rpc Welcome(User) returns (Response) {}
+}
+
+message ContactUs {
+    string name = 1;
+    string email = 2;
+    string phone = 3;
+    string company = 4;
+    string message = 5;
+}
+
+message User {
+    string id = 1;
+    string user_id = 2;
+    string member_id = 3;
+    string first_name = 4;
+    string last_name = 5;
+    string initial = 6;
+    string email = 7;
+    string trn = 8;
+    string work_phone = 9;
+    string home_phone = 10;
+    string cell_phone = 11;
+    string sponsor_id = 12;
+    string address = 13;
+    string parish = 14;
+    string country = 15;
+    string question = 16;
+    string answer = 17;
+    string dob = 18;
+    string gender = 19;
+    string stripe_id = 20;
+    string plan_id = 21;
+    string referral_code = 22;
+}
+
+message Response {}

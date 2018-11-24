@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+    rpc Create(Request) returns (Response) {}
+    rpc Update(User) returns (Response) {}
+    rpc Delete(User) returns (Response) {}
+    rpc Get(User) returns (Response) {}
+    rpc All(Request) returns (Response) {}
+    rpc ValidateToken(Token) returns (Token) {}
+    rpc GetUsers(Id) returns (Response) {}
+    rpc GetByEmail(User) returns (Response) {}
+    rpc GetByMemberId(User) returns (Response) {}
+    rpc GetUserReferral(User) returns (Response) {}
+}
+
+message Id {
+    repeated string id = 1;
+}
+
+message User {
+    string id = 1;
+    string user_id = 2;
+    string member_id = 3;
+    string first_name = 4;
+    string last_name = 5;
+    string initial = 6;
+    string email = 7;
+    string trn = 8;
+    string work_phone = 9;
+    string home_phone = 10;
+    string cell_phone = 11;
+    string sponsor_id = 12;
+    string address = 13;
+    string address2 = 14;
+    string parish = 15;
+    string country = 16;
+    string question = 17;
+    string answer = 18;
+    int64 dob = 19;
+    string gender = 20;
+    string stripe_id = 21;
+    string plan_id = 22;
+    string referral_code = 23;
+    int64 membership_exp = 24;
+    string profile_pic = 25;
+    int32 count = 26;
+    int32 level = 27;
+}
+
+message Token {
+    string token = 1;
+    bool valid = 2;
+    repeated Error errors = 3;
+}
+
+message Request {
+    User user = 1;
+    string token = 2;
+    bool save_card = 3;
+}
+
+message Response {
+    User user = 1;
+    Error error = 2;
+    repeated User users = 3;
+    repeated Error errors = 4;
+}
+
+message Error {
+    int32 code = 1;
+    string description = 2;
+}

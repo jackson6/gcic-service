@@ -30,12 +30,20 @@
   version = "1.2.0"
 
 [[constraint]]
+  branch = "master"
+  name = "github.com/jackson6/gcic-service"
+
+[[constraint]]
   name = "github.com/jinzhu/gorm"
   version = "1.9.1"
 
 [[constraint]]
   name = "github.com/micro/go-micro"
-  version = "0.13.0"
+  version = "0.14.1"
+
+[[constraint]]
+  name = "github.com/micro/kubernetes"
+  version = "0.1.0"
 
 [[constraint]]
   branch = "master"

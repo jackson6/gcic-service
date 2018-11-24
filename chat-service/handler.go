@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"github.com/jackson6/gcic-service/chat-service/_vendor-20181124171755/gopkg.in/mgo.v2"
 	pb "github.com/jackson6/gcic-service/chat-service/proto/chat"
 	userProto "github.com/jackson6/gcic-service/user-service/proto/user"
 	"gopkg.in/mgo.v2"
@@ -81,7 +82,7 @@ func (s *service) Contacts(ctx context.Context, user *pb.User, res *pb.Response)
 		return err
 	}
 
-	response1, err := s.userClient.GetUserReferred(context.Background(), &userProto.User{Id: user.Id, SponsorId :user.SponsorId})
+	response1, err := s.userClient.GetReferred(context.Background(), &userProto.User{Id: user.Id, SponsorId :user.SponsorId})
 	if err != nil {
 		return err
 	}

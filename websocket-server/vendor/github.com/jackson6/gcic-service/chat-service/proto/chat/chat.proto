@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package chat;
+
+service ChatService {
+    rpc Messages(MessageReq) returns(Response) {}
+    rpc Contacts(User) returns(Response) {}
+}
+
+
+message User {
+    string id = 1;
+    string referral_code = 2;
+}
+
+message ContactResp {
+    string from = 1;
+    int64 unread = 2;
+    Message message = 3;
+}
+
+message MessageReq {
+    string to = 1;
+    string from = 2;
+    string next_id = 3;
+    int64 next_time = 4;
+}
+
+message MessageResp {
+    string from = 1;
+    int64 next_time = 2;
+    string next_id = 3;
+    repeated Message messages = 4;
+}
+
+message Message {
+    string id = 1;
+    string from = 2;
+    string to = 3;
+    string text = 4;
+    int64 time = 5;
+    string next = 6;
+    bool seen = 7;
+    bool received = 8;
+    string event = 9;
+}
+
+message Error {
+    int32 code = 1;
+    string description = 2;
+}
+
+message Response {
+    repeated ContactResp contacts = 1;
+    MessageResp messages = 2;
+}
+
+message Request {}

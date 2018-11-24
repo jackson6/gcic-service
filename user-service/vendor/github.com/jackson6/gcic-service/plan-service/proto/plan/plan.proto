@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package plan;
+
+service PlanService {
+    rpc Create(Plan) returns (Response) {}
+    rpc Update(Plan) returns (Response) {}
+    rpc Delete(Plan) returns (Response) {}
+    rpc Get(Plan) returns (Response) {}
+    rpc All(Request) returns (Response) {}
+}
+
+message Plan {
+    string id = 1;
+    int64 amount = 2;
+    string name = 3;
+    string description = 4;
+    repeated string includes = 5;
+}
+
+message Request {}
+
+message Error {
+    int32 code = 1;
+    string description = 2;
+}
+
+message Response {
+    int32 code = 1;
+    Plan plan = 2;
+    repeated Plan plans = 3;
+    repeated Error errors = 4;
+}

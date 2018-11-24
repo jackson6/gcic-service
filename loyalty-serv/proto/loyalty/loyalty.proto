@@ -1,0 +1,62 @@
+
+syntax = "proto3";
+
+service LoyaltyService {
+    rpc GetPartner (PartnerRequestId) returns (Response) {}
+    rpc GetMember (MemberRequestId) returns (Response) {}
+    rpc AddMember (Member) returns (Response) {}
+    rpc AddPartner (Partner) returns (Response) {}
+    rpc UsePoints(Transaction) returns (Response) {}
+    rpc EarnPoints(Transaction) returns (Response) {}
+}
+
+message Empty {}
+
+message Member {
+    string memberId = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string cardNumber = 4;
+    double points = 5;
+}
+
+message Partner {
+    string partnerId = 1;
+    string name = 2;
+    string address = 3;
+}
+
+message PartnerList {
+    repeated Partner partners = 1;
+}
+
+message MemberRequestId {
+    string memberId = 1;
+}
+
+message PartnerRequestId {
+    string partnerId = 1;
+}
+
+message Transaction {
+    string partnerId = 1;
+    string memberId = 2;
+    double points = 3;
+    string transactionId = 4;
+    string timestamp = 5;
+}
+
+message Error {
+    int32 code = 1;
+    string description = 2;
+}
+
+message Response {
+    int64 Code = 1;
+    Transaction transaction = 2;
+    repeated Transaction transactions = 3;
+    Partner partner = 4;
+    repeated Partner partners = 5;
+    Member member = 6;
+    repeated Error errors = 7;
+}
