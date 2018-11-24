@@ -81,7 +81,7 @@ func (s *service) Contacts(ctx context.Context, user *pb.User, res *pb.Response)
 		return err
 	}
 
-	response1, err := s.userClient.GetReferred(context.Background(), &userProto.User{Id: user.Id, SponsorId :user.SponsorId})
+	response1, err := s.userClient.GetUserReferred(context.Background(), &userProto.User{Id: user.Id, SponsorId :user.SponsorId})
 	if err != nil {
 		return err
 	}

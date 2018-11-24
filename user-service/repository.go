@@ -14,7 +14,7 @@ type Repository interface {
 	All() ([]*pb.User, error)
 	Get(string) (*pb.User, error)
 	GetReferrals(string) ([]*pb.User, error)
-	GetReferred(string) (pb.User, error)
+	GetReferred(string) (*pb.User, error)
 	GetByEmail(string) (*pb.User, error)
 	GetByMemberId(string) (*pb.User, error)
 	GetUsers([]string) ([]*pb.User, error)

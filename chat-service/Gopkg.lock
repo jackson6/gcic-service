@@ -2,13 +2,6 @@
 
 
 [[projects]]
-  digest = "1:6c0f1bc4d83abbdcb860204b7935b5cf072d449e225c33946b68968aa06d20a0"
-  name = "github.com/armon/go-metrics"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "3df31a1ada83e310c2e24b267c8e8b68836547b4"
-
-[[projects]]
   branch = "master"
   digest = "1:b01baf06b06307477bce22531bb77ac36165113067db11825ad4787405a395c4"
   name = "github.com/captaincodeman/couponcode"
@@ -61,11 +54,12 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:77cb3be9b21ba7f1a4701e870c84ea8b66e7d74c7c8951c58155fdadae9414ec"
+  digest = "1:f47d6109c2034cb16bd62b220e18afd5aa9d5a1630fe5d937ad96a4fb7cbb277"
   name = "github.com/hashicorp/go-cleanhttp"
   packages = ["."]
   pruneopts = "UT"
-  revision = "d5fe4b57a186c716b0e00b8c301cbd9b4182694d"
+  revision = "e8ab9daed8d1ddd2d3c4efba338fe2eeae2e4f18"
+  version = "v0.5.0"
 
 [[projects]]
   branch = "master"
@@ -76,19 +70,20 @@
   revision = "6bb64b370b90e7ef1fa532be9e591a81c3493e00"
 
 [[projects]]
-  digest = "1:acc81e4e4289587b257ccdfccbc6eaf16d4c2fb57dda73c6bb349bf50f02501f"
+  digest = "1:0dd7b7b01769f9df356dc99f9e4144bdbabf6c79041ea7c0892379c5737f3c44"
   name = "github.com/hashicorp/serf"
   packages = ["coordinate"]
   pruneopts = "UT"
-  revision = "19bbd39e421bdf3559d5025fb2c760f5ffa56233"
+  revision = "d6574a5bb1226678d7010325fb6c985db20ee458"
+  version = "v0.8.1"
 
 [[projects]]
   branch = "master"
-  digest = "1:03da9b2f8cf1b52fd1f0e556018316a8c1a1a478dc9e0ffe1f0eada8d935de82"
+  digest = "1:2477b9f0cafc4147ec16641b989669dfb25a9281150b67b5f5e9349422d644a5"
   name = "github.com/jackson6/gcic-service"
   packages = ["user-service/proto/user"]
   pruneopts = "UT"
-  revision = "23e9f492483aea0fa986648b54993fbed93601c2"
+  revision = "6f943164ec75c0da82fc26572bb5970f6b5585bb"
 
 [[projects]]
   digest = "1:6895fbe5a10c5aebd1965cac6f6905dcdb21bee01e08912d3ba6a805c2485f6a"
@@ -138,12 +133,12 @@
   revision = "8b9d33ec2f19cfe2fe9f448f18b033c004c18fd2"
 
 [[projects]]
-  digest = "1:7984d4f0cdaf14595e27a91315ee2b8ac12f1ac53e3e2ee53ca90e1ddb4da7f1"
+  digest = "1:b11e7131c5f2ed32cf4bed89b2c55a5ad5f010e0fb8527367ecf79834dc576ca"
   name = "github.com/micro/go-grpc"
   packages = ["."]
   pruneopts = "UT"
-  revision = "52024085c07e420ed8795c95006255a75feb500e"
-  version = "v0.3.0"
+  revision = "b2e5cd7d4f24a17b902c919b6b90abf883ba9a41"
+  version = "v0.4.0"
 
 [[projects]]
   branch = "master"
@@ -199,8 +194,8 @@
     "server/grpc",
   ]
   pruneopts = "UT"
-  revision = "870bfdace19263f178af2ad9760c6387126e2c4b"
-  version = "v0.16.0"
+  revision = "27e02eff71790966536e17a1749388c62cb69a1e"
+  version = "v0.16.1"
 
 [[projects]]
   branch = "master"
@@ -306,11 +301,12 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:bba69fe95a60f59a68df402c23d57ffdc5596200901189958aea969c468d550f"
+  digest = "1:53bc4cd4914cd7cd52139990d5170d6dc99067ae31c56530621b18b35fc30318"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
   pruneopts = "UT"
-  revision = "5a380f224700b8a6c4eaad048804f5bff514cb35"
+  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
+  version = "v1.1.2"
 
 [[projects]]
   digest = "1:33422d238f147d247752996a26574ac48dcf472976eda7f5134015f06bf16563"
@@ -378,11 +374,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:44010c69a8af2745fcdc6b4c57b126b4dd3de5cb01b6a5ba97a1781a24df0886"
+  digest = "1:225564f71149334315118db714e1ea87513e4a11cf4acb27e26bc7577cebfa0b"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "ec83556a53fe16b65c452a104ea9d1e86a671852"
+  revision = "62eef0e2fa9b2c385f7b2778e763486da6880d37"
 
 [[projects]]
   digest = "1:a2ab62866c75542dd18d2b069fec854577a20211d7c0ea6ae746072a1dccdd18"

@@ -109,7 +109,7 @@ func (s *service) GetUserReferral(ctx context.Context, req *pb.User, res *pb.Res
 	return nil
 }
 
-func (s *service) GetUserReferred(ctx context.Context, req *pb.User, res *pb.Response) error {
+func (s *service) GetReferred(ctx context.Context, req *pb.User, res *pb.Response) error {
 	user, err := s.repo.GetReferred(req.SponsorId)
 	if err != nil {
 		log.Println("error", err)
