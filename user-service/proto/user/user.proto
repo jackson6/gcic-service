@@ -13,6 +13,7 @@ service UserService {
     rpc GetByEmail(User) returns (Response) {}
     rpc GetByMemberId(User) returns (Response) {}
     rpc GetUserReferral(User) returns (Response) {}
+    rpc GetReferred(User) returns (Response) {}
 }
 
 message Id {

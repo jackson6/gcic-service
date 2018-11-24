@@ -81,7 +81,6 @@ func (hub *Hub) send(message *Message, client *Client) {
 	if client != nil {
 		client.outbound <- data
 	}
-	go hub.repo.Save(message)
 }
 
 func (hub *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
@@ -94,6 +93,7 @@ func (hub *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id := r.URL.Query().Get("id")
+
 	client := newClient(hub, socket, id)
 
 	hub.register <- client
@@ -127,6 +127,7 @@ func (hub *Hub) onMessage(message []byte) {
 		msg.Id = bson.NewObjectId()
 		to := hub.clients[msg.To]
 		hub.send(&msg, to)
+		go hub.repo.Save(&msg)
 		break
 	case "Seen":
 		data, err := hub.repo.GetById(msg.Id)
@@ -149,6 +150,10 @@ func (hub *Hub) onMessage(message []byte) {
 		to := hub.clients[msg.From]
 		hub.send(&msg, to)
 		go hub.repo.Update(data)
+	case "Typing":
+		to := hub.clients[msg.To]
+		hub.send(&msg, to)
+		break
 	}
 }
 

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/emicklei/go-restful"
 	paymentProto "github.com/jackson6/gcic-service/payment-service/proto/payment"
-	planProto "github.com/jackson6/gcic-service/plan-service/proto/plan"
 	"github.com/jackson6/gcic-service/service-client/client"
 	"github.com/jackson6/gcic-service/service-client/lib"
 	pb "github.com/jackson6/gcic-service/user-service/proto/user"
@@ -113,42 +112,6 @@ func UpdateUserEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, s
 	RespondJSON(w, http.StatusOK, response)
 }
 
-func RefreshMembershipEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client) {
-	defer r.Body.Close()
-
-	charge := new(paymentProto.Charge)
-	if err := json.NewDecoder(r.Body).Decode(&charge); err != nil {
-		RespondError(w, http.StatusBadRequest, BadRequest, err)
-		return
-	}
-
-	planResp, err := service.Plan.Get(context.Background(), &planProto.Plan{Id:charge.Id})
-	if err != nil {
-		RespondError(w, http.StatusInternalServerError, InternalError, err)
-		return
-	}
-
-	newCharge := &paymentProto.Charge{
-		Amount: planResp.Plan.Amount,
-		Description: planResp.Plan.Description,
-		Currency: charge.Currency,
-		Token: charge.Token,
-		UserId: user.UserId,
-	}
-
-	resp, err := service.Payment.CreateCharge(context.Background(), newCharge)
-	if err != nil {
-		RespondError(w, http.StatusInternalServerError, InternalError, err)
-		return
-	}
-	response := HttpResponse{
-		ResultCode: 200,
-		CodeContent: "Success",
-		Data: resp,
-	}
-	RespondJSON(w, http.StatusOK, response)
-}
-
 func UploadProfilePicEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client, bucket *storage.BucketHandle, bucketName string){
 
 	imgUrl, err := lib.UploadFileFromForm(r, bucket, bucketName)
@@ -172,23 +135,6 @@ func UploadProfilePicEndPoint(w http.ResponseWriter, r *http.Request, user *pb.U
 	response := HttpResponse{
 		ResultCode: 200,
 		CodeContent: "Success",
-	}
-	RespondJSON(w, http.StatusOK, response)
-}
-
-func PaymentHistoryEndPoint(w http.ResponseWriter, r *http.Request, user *pb.User, service *client.Client){
-	defer r.Body.Close()
-
-	req := paymentProto.Transaction{UserId: user.Id}
-	resp, err := service.Payment.History(context.Background(), &req)
-	if err != nil {
-		RespondError(w, http.StatusInternalServerError, InternalError, err)
-		return
-	}
-	response := HttpResponse{
-		ResultCode: 200,
-		CodeContent: "Success",
-		Data: resp.Transactions,
 	}
 	RespondJSON(w, http.StatusOK, response)
 }

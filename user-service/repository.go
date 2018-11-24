@@ -14,6 +14,7 @@ type Repository interface {
 	All() ([]*pb.User, error)
 	Get(string) (*pb.User, error)
 	GetReferrals(string) ([]*pb.User, error)
+	GetReferred(string) (pb.User, error)
 	GetByEmail(string) (*pb.User, error)
 	GetByMemberId(string) (*pb.User, error)
 	GetUsers([]string) ([]*pb.User, error)
@@ -92,6 +93,14 @@ func (repo *UserRepository) GetReferrals(code string) ([]*pb.User, error) {
 	}
 
 	return users, nil
+}
+
+func (repo *UserRepository) GetReferred(id string) (*pb.User, error) {
+	user := new(pb.User)
+	if err := repo.db.Where("sponsor_id = ?", id).Find(&user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {

@@ -11,6 +11,7 @@ service ChatService {
 message User {
     string id = 1;
     string referral_code = 2;
+    string sponsor_id = 3;
 }
 
 message MessageReq {

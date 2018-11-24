@@ -1,0 +1,63 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+      - name: user-service
+        image: eu.gcr.io/gcic-219917/user-service:latest
+        imagePullPolicy: Always
+        command: [
+          "./user-service",
+          "--selector=static",
+          "--server_address=:8080",
+        ]
+        env:
+        - name: DB_HOST
+          value: "127.0.0.1:3306"
+        - name: DB_NAME
+          value: "gcic"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-db-credentials
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-db-credentials
+              key: password
+        - name: STRIPE_KEY
+          value: "sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
+        - name: UPDATED_AT
+          value: "Sun 19 Sep 2018 14:38:58 GMT"
+        ports:
+        - containerPort: 8080
+          name: user-port
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.11
+        command: ["/cloud_sql_proxy",
+                  "-instances=gcic-219917:us-central1:gcic=tcp:3306",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        # [START cloudsql_security_context]
+        securityContext:
+          runAsUser: 2  # non-root user
+          allowPrivilegeEscalation: false
+        # [END cloudsql_security_context]
+        volumeMounts:
+        - name: cloudsql-instance-credentials
+          mountPath: /secrets/cloudsql
+          readOnly: true
+      volumes:
+      - name: cloudsql-instance-credentials
+        secret:
+          secretName: cloudsql-instance-credentials
