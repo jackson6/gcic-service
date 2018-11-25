@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"github.com/jackson6/gcic-service/chat-service/_vendor-20181124171755/gopkg.in/mgo.v2"
 	pb "github.com/jackson6/gcic-service/chat-service/proto/chat"
 	userProto "github.com/jackson6/gcic-service/user-service/proto/user"
 	"gopkg.in/mgo.v2"

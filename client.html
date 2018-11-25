@@ -189,7 +189,7 @@
             var message = chat.value;
             chat.value = "";
             var recipient = to.value
-            data = {event: "Message", from: "2HDpcqTvIPfwagoJls6uGRtkaB43", to: "rHcV9CrdYkb041yF7AvBtdXJuYe2", text: message, time: new Date().getTime()};
+            data = {event: "Typing", from: "iqVQYgXNd3cd21FK3fMR2jeJ61e2", to: "rHcV9CrdYkb041yF7AvBtdXJuYe2", text: message, time: new Date().getTime()};
             websocket.send(JSON.stringify(data));
         }
 

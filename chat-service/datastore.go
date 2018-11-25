@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"gopkg.in/mgo.v2"
 )
 
