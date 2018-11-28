@@ -12,3 +12,6 @@ run:
 		-e STRIPE_KEY="sk_test_0R7KtTokmbmUk1sK2qqdyi6y"
 		-e DB_HOST=mongodb\://gcic\:dreamer6@ds163330.mlab.com\:63330/invest \
 		payment-service
+deploy:
+	sed "s/{{ UPDATED_AT }}/$(shell date)/g" ./deployments/deployment.tmpl > ./deployments/deployment.yml
+	kubectl replace -f ./deployments/deployment.yml

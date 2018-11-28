@@ -86,6 +86,8 @@ func (s *service) Contacts(ctx context.Context, user *pb.User, res *pb.Response)
 		return err
 	}
 
+	response.Users = append(response.Users, response1.User)
+
 	data, err := repo.Contacts(response.Users, user.Id)
 	if err != nil {
 		return err

@@ -10,3 +10,6 @@ run:
 		-e DISABLE_AUTH=false \
 		-e MICRO_REGISTRY=mdns \
 		email-service
+deploy:
+	sed "s/{{ UPDATED_AT }}/$(shell date)/g" ./deployments/deployment.tmpl > ./deployments/deployment.yml
+	kubectl replace -f ./deployments/deployment.yml

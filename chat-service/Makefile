@@ -11,3 +11,6 @@ run:
 		-e MICRO_REGISTRY=mdns \
 		-e MONGO_HOST=mongodb\://gcic\:dreamer6@ds163330.mlab.com\:63330/invest \
 		chat-service
+deploy:
+	sed "s/{{ UPDATED_AT }}/$(shell date)/g" ./deployments/deployment.tmpl > ./deployments/deployment.yml
+	kubectl replace -f ./deployments/deployment.yml

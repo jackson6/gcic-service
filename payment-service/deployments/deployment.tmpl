@@ -1,0 +1,31 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: benefit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: benefit
+  template:
+    metadata:
+      labels:
+        app: benefit
+    spec:
+      containers:
+      - name: benefit-service
+        image: eu.gcr.io/gcic-219917/benefit-service:latest
+        imagePullPolicy: Always
+        command: [
+          "./benefit-service",
+          "--selector=static",
+          "--server_address=:8080",
+        ]
+        env:
+        - name: DB_HOST
+          value: "mongo:27017"
+        - name: UPDATED_AT
+          value: "{{ UPDATED_AT }}"
+        ports:
+        - containerPort: 8080
+          name: benefit-port
